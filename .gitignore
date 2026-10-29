@@ -1,0 +1,38 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# Data and large files
+data/*
+!data/.gitkeep
+*.csv
+*.parquet
+*.h5
+*.pkl
+*.joblib
+models/*
+!models/.gitkeep
+
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# IDE / Editor folders
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Environment variables
+.env
