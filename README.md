@@ -2,21 +2,49 @@
 
 An end-to-end Machine Learning pipeline and web application for detecting fraudulent transactions in financial data.
 
-## Project Overview
-- **Data Ingestion & Preprocessing**: Handling class imbalance (e.g., SMOTE, undersampling), feature scaling, and anomaly feature extraction.
-- **Model Training**: Evaluation of multiple machine learning models (Random Forest, XGBoost, LightGBM, Logistic Regression).
-- **Inference & API / UI**: Interactive dashboard / REST API for real-time transaction scoring and fraud alerts.
+## Features
+- **Data Pipeline**: Synthetic transaction generator & Kaggle dataset support.
+- **Model Training**: Balanced Random Forest / XGBoost with evaluation on ROC-AUC, PR-AUC, and precision-recall trade-offs.
+- **Interactive UI**: Streamlit web dashboard for real-time risk assessment and fraud scoring.
+
+---
 
 ## Project Structure
 ```text
 Fraud-detection/
-├── data/              # Raw and processed datasets (ignored in git)
-├── notebooks/         # Exploratory Data Analysis & experiments
-├── src/               # Source code modules
-│   ├── data/          # Data loading & preprocessing
-│   ├── models/        # Training & evaluation pipelines
-│   └── app/           # Web app / API interface (Streamlit / FastAPI)
-├── models/            # Serialized trained model artifacts
-├── requirements.txt   # Project dependencies
-└── README.md          # Project documentation
+├── data/                       # Datasets (ignored from git)
+├── models/                     # Serialized model artifacts (.joblib, ignored from git)
+├── src/
+│   ├── data/
+│   │   └── generate_data.py    # Synthetic transaction generator
+│   ├── models/
+│   │   └── train.py            # Preprocessing and model training pipeline
+│   └── app/
+│       └── app.py              # Streamlit interactive dashboard
+├── requirements.txt            # Python dependencies
+└── README.md
+```
+
+---
+
+## Quickstart
+
+### 1. Setup Virtual Environment
+```bash
+# Recommended with Python 3.10
+py -3.10 -m venv venv
+venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+```
+
+### 2. Generate Synthetic Data & Train Model
+```bash
+python -m src.models.train
+```
+
+### 3. Launch Streamlit Dashboard
+```bash
+streamlit run src/app/app.py
 ```
