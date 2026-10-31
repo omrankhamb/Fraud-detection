@@ -1,0 +1,88 @@
+{
+  "macro_f1": 0.9814,
+  "scam_f1": 0.9678,
+  "scam_precision": 0.963,
+  "scam_recall": 0.9727,
+  "roc_auc": 0.9835,
+  "pr_auc": 0.9959,
+  "brier_score": 0.0064,
+  "hard_negative_fpr": 0.0057,
+  "language_breakdown": {
+    "hinglish": {
+      "count": 3537,
+      "macro_f1": 0.9841,
+      "scam_precision": 0.9762,
+      "scam_recall": 0.9715
+    },
+    "en": {
+      "count": 1701,
+      "macro_f1": 0.9475,
+      "scam_precision": 0.8302,
+      "scam_recall": 0.9778
+    },
+    "hi": {
+      "count": 10,
+      "macro_f1": 0.4737,
+      "scam_precision": 0.9,
+      "scam_recall": 1.0
+    },
+    "mr": {
+      "count": 10,
+      "macro_f1": 0.4737,
+      "scam_precision": 0.9,
+      "scam_recall": 1.0
+    }
+  },
+  "theme_breakdown": {
+    "genuine_communication": {
+      "count": 4555,
+      "accuracy": 0.9956
+    },
+    "financial_smishing": {
+      "count": 626,
+      "accuracy": 0.9712
+    },
+    "general_smishing": {
+      "count": 36,
+      "accuracy": 0.9722
+    },
+    "electricity_disconnection": {
+      "count": 4,
+      "accuracy": 1.0
+    },
+    "digital_arrest": {
+      "count": 4,
+      "accuracy": 1.0
+    },
+    "kyc_account_blocked": {
+      "count": 4,
+      "accuracy": 1.0
+    },
+    "job_task_scam": {
+      "count": 4,
+      "accuracy": 1.0
+    },
+    "customs_parcel": {
+      "count": 4,
+      "accuracy": 1.0
+    },
+    "upi_cashback": {
+      "count": 4,
+      "accuracy": 1.0
+    },
+    "malicious_apk": {
+      "count": 3,
+      "accuracy": 1.0
+    },
+    "predatory_loan": {
+      "count": 3,
+      "accuracy": 1.0
+    },
+    "lottery_kbc": {
+      "count": 3,
+      "accuracy": 1.0
+    }
+  },
+  "total_instances": 5258,
+  "error_count": 45
+}

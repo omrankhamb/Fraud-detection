@@ -151,13 +151,6 @@ def extract_url_features(url: str) -> Dict[str, Any]:
     subdomain, domain_name, suffix = parse_domain_parts(netloc)
     registered_domain = f"{domain_name}.{suffix}" if suffix else domain_name
 
-    # Check Whitelist (Tranco top sites feed + institutional whitelist)
-    is_whitelisted = (
-        registered_domain in GENUINE_DOMAINS_WHITELIST
-        or netloc in GENUINE_DOMAINS_WHITELIST
-        or registered_domain in DYNAMIC_TRANCO_DOMAINS
-    )
-
     # Check Live Phishing Blocklist (OpenPhish / URLhaus threat feeds)
     in_blocklist = (
         full_url in DYNAMIC_PHISHING_URLS
@@ -170,6 +163,13 @@ def extract_url_features(url: str) -> Dict[str, Any]:
 
     # Check shorteners
     is_shortener = netloc in URL_SHORTENERS or registered_domain in URL_SHORTENERS
+
+    # Check Whitelist (Tranco top sites feed + institutional whitelist, excluding shorteners)
+    is_whitelisted = (
+        registered_domain in GENUINE_DOMAINS_WHITELIST
+        or netloc in GENUINE_DOMAINS_WHITELIST
+        or (registered_domain in DYNAMIC_TRANCO_DOMAINS and not is_shortener)
+    ) and not is_shortener
 
     # Check suspicious TLD
     has_suspicious_tld = suffix in SUSPICIOUS_TLDS

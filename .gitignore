@@ -9,6 +9,11 @@ venv/
 env/
 ENV/
 
+# Node / Frontend
+node_modules/
+dist/
+.vite/
+
 # Data and large files
 data/*
 !data/.gitkeep

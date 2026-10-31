@@ -24,15 +24,20 @@ from src.rules import extract_rule_cues
 
 PROJECT_ROOT = Path(__file__).resolve().parent
 MODEL_PATH = PROJECT_ROOT / "models" / "baseline_model.joblib"
+FUSION_PATH = PROJECT_ROOT / "models" / "fusion_model.joblib"
 
 
 def load_model():
+    fusion_artifact = None
+    if FUSION_PATH.exists():
+        fusion_artifact = joblib.load(FUSION_PATH)
+
     if not MODEL_PATH.exists():
         raise FileNotFoundError(
             f"Model artifact not found at {MODEL_PATH}. Run 'python -m src.train_baseline' first."
         )
-    artifact = joblib.load(MODEL_PATH)
-    return artifact["pipeline"]
+    baseline_artifact = joblib.load(MODEL_PATH)
+    return baseline_artifact["pipeline"], fusion_artifact
 
 
 def predict_batch(input_csv: str, output_csv: str):
@@ -57,7 +62,7 @@ def predict_batch(input_csv: str, output_csv: str):
             break
 
     print(f"Loading predictive models...")
-    pipeline = load_model()
+    pipeline, fusion_artifact = load_model()
 
     verdicts = []
     confidence_scores = []
@@ -90,19 +95,21 @@ def predict_batch(input_csv: str, output_csv: str):
 
         # 5. Multimodal Score Fusion
         # Fuses text learned probability with verified cybersecurity signals:
-        is_official_dlt = bool(sender_id and len(sender_id) == 9 and sender_id[2] == "-")
-        has_genuine_disclaimer = bool(re.search(r"\b(never\s*share|not\s*done\s*by\s*you|valid\s*for\s*\d+\s*min)\b", raw_text, re.IGNORECASE))
-
-        if (is_official_dlt or has_genuine_disclaimer) and url_res["max_url_risk"] == 0.0 and not rule_res["has_credential_threat"]:
-            # Verified official bank alert / genuine OTP without malicious link
-            calibrated_score = min(text_prob * 0.20, 0.20)
-        elif url_res["any_whitelisted"] and not rule_res["has_credential_threat"]:
-            calibrated_score = min(text_prob * 0.35, 0.25)
-        elif url_res["max_url_risk"] >= 0.80 or rule_res["has_digital_arrest"]:
-            calibrated_score = max(text_prob, 0.85)
+        if fusion_artifact:
+            from src.fusion import predict_fusion_proba
+            calibrated_score = predict_fusion_proba(raw_text, sender_id, fusion_artifact)
         else:
-            # Weighted ensemble of text probability and heuristic cues
-            calibrated_score = (0.55 * text_prob) + (0.30 * url_risk) + (0.15 * rule_risk)
+            is_official_dlt = bool(sender_id and len(sender_id) == 9 and sender_id[2] == "-")
+            has_genuine_disclaimer = bool(re.search(r"\b(never\s*share|not\s*done\s*by\s*you|valid\s*for\s*\d+\s*min)\b", raw_text, re.IGNORECASE))
+
+            if (is_official_dlt or has_genuine_disclaimer) and url_res["max_url_risk"] == 0.0 and not rule_res["has_credential_threat"]:
+                calibrated_score = min(text_prob * 0.20, 0.20)
+            elif url_res["any_whitelisted"] and not rule_res["has_credential_threat"]:
+                calibrated_score = min(text_prob * 0.35, 0.25)
+            elif url_res["max_url_risk"] >= 0.80 or rule_res["has_digital_arrest"]:
+                calibrated_score = max(text_prob, 0.85)
+            else:
+                calibrated_score = (0.55 * text_prob) + (0.30 * url_risk) + (0.15 * rule_risk)
 
         calibrated_score = max(0.0, min(1.0, calibrated_score))
         predicted_label = 1 if calibrated_score >= 0.50 else 0

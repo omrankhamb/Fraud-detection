@@ -20,6 +20,7 @@ st.set_page_config(
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 MODEL_PATH = PROJECT_ROOT / "models" / "baseline_model.joblib"
+FUSION_PATH = PROJECT_ROOT / "models" / "fusion_model.joblib"
 
 from src.explain import generate_explanation
 from src.features_url import analyze_message_urls
@@ -29,12 +30,16 @@ from src.rules import extract_rule_cues
 
 @st.cache_resource
 def load_trained_model():
-    if not MODEL_PATH.exists():
-        return None
-    return joblib.load(MODEL_PATH)["pipeline"]
+    baseline_pipe = None
+    fusion_artifact = None
+    if MODEL_PATH.exists():
+        baseline_pipe = joblib.load(MODEL_PATH)["pipeline"]
+    if FUSION_PATH.exists():
+        fusion_artifact = joblib.load(FUSION_PATH)
+    return baseline_pipe, fusion_artifact
 
 
-model_pipeline = load_trained_model()
+model_pipeline, fusion_artifact = load_trained_model()
 
 # Header & Branding
 st.title("🛡️ CBL-01: Multilingual Scam & Phishing Detector")
@@ -144,18 +149,22 @@ with tab_single:
             rule_res = extract_rule_cues(message_input, sender_input)
             rule_risk = rule_res["rule_risk_score"]
 
-            # 4. Multimodal Calibration
-            is_official_dlt = bool(sender_input and len(sender_input) == 9 and sender_input[2] == "-")
-            has_genuine_disclaimer = bool(re.search(r"\b(never\s*share|not\s*done\s*by\s*you|valid\s*for\s*\d+\s*min)\b", message_input, re.IGNORECASE))
-
-            if (is_official_dlt or has_genuine_disclaimer) and url_risk == 0.0 and not rule_res["has_credential_threat"]:
-                calibrated_score = min(text_prob * 0.20, 0.20)
-            elif url_res["any_whitelisted"] and not rule_res["has_credential_threat"]:
-                calibrated_score = min(text_prob * 0.35, 0.25)
-            elif url_risk >= 0.80 or rule_res["has_digital_arrest"]:
-                calibrated_score = max(text_prob, 0.85)
+            # 4. Multimodal Stacking Calibration
+            if fusion_artifact:
+                from src.fusion import predict_fusion_proba
+                calibrated_score = predict_fusion_proba(message_input, sender_input, fusion_artifact)
             else:
-                calibrated_score = (0.55 * text_prob) + (0.30 * url_risk) + (0.15 * rule_risk)
+                is_official_dlt = bool(sender_input and len(sender_input) == 9 and sender_input[2] == "-")
+                has_genuine_disclaimer = bool(re.search(r"\b(never\s*share|not\s*done\s*by\s*you|valid\s*for\s*\d+\s*min)\b", message_input, re.IGNORECASE))
+
+                if (is_official_dlt or has_genuine_disclaimer) and url_risk == 0.0 and not rule_res["has_credential_threat"]:
+                    calibrated_score = min(text_prob * 0.20, 0.20)
+                elif url_res["any_whitelisted"] and not rule_res["has_credential_threat"]:
+                    calibrated_score = min(text_prob * 0.35, 0.25)
+                elif url_risk >= 0.80 or rule_res["has_digital_arrest"]:
+                    calibrated_score = max(text_prob, 0.85)
+                else:
+                    calibrated_score = (0.55 * text_prob) + (0.30 * url_risk) + (0.15 * rule_risk)
 
             calibrated_score = max(0.0, min(1.0, calibrated_score))
 

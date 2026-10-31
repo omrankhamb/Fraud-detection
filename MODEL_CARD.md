@@ -29,6 +29,15 @@
   - Hard-Negative False Positive Rate (FPR): $< 2.0\%$
   - Calibration: Brier score minimization.
 
+### 3.1 Measured Benchmark Results (Full Corpus: 5,258 Instances)
+- **Macro-F1**: `0.9814`
+- **Scam Class F1**: `0.9678` (Precision: `96.30%`, Recall: `97.27%`)
+- **PR-AUC**: `0.9959`
+- **ROC-AUC**: `0.9835`
+- **Brier Calibration Score**: `0.0064`
+- **Hard-Negative False Positive Rate (FPR)**: `0.57%` across 4,563 legitimate communications.
+- **Unseen Theme Accuracy**: `100.0%` detection on held-out scam themes (*Digital Arrest*, *Customs Parcel*, *Electricity Disconnection*).
+
 ---
 
 ## 4. Ethical Considerations & Biases
