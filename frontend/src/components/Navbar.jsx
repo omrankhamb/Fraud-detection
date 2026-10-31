@@ -15,32 +15,34 @@ export default function Navbar({ onQuickUrlSearch, onReportClick }) {
     <div className="floating-navbar-container">
       <nav className="floating-navbar">
         {/* Project Title: Scam Detector */}
-        <a href="#home" className="brand-logo-container">
+        <a href="#home" className="brand-logo-container" style={{ textDecoration: 'none' }}>
           <div className="brand-icon-shield">
-            <svg width="40" height="40" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="38" height="38" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
                 d="M24 4L8 10V22C8 32 15 40.5 24 44C33 40.5 40 32 40 22V10L24 4Z"
-                fill="url(#shieldGrad)"
+                fill="url(#sdNavShieldGrad)"
               />
               <path
                 d="M24 7.5L11 12.5V22C11 30.5 16.5 37.8 24 40.8C31.5 37.8 37 30.5 37 22V12.5L24 7.5Z"
                 fill="#0F172A"
               />
-              <circle cx="24" cy="23" r="8" stroke="#F97316" strokeWidth="2.5" fill="#1E293B" />
-              <path d="M21 23L23.5 25.5L27.5 20.5" stroke="#F97316" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+              {/* Magnifying Glass Accent */}
+              <circle cx="23" cy="22" r="7.5" stroke="#EA580C" strokeWidth="2.6" fill="#1E293B" />
+              <path d="M28.5 27.5L33.5 32.5" stroke="#EA580C" strokeWidth="2.8" strokeLinecap="round" />
+              <path d="M20.5 22L22.5 24L26 20" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               <defs>
-                <linearGradient id="shieldGrad" x1="8" y1="4" x2="40" y2="44" gradientUnits="userSpaceOnUse">
+                <linearGradient id="sdNavShieldGrad" x1="8" y1="4" x2="40" y2="44" gradientUnits="userSpaceOnUse">
                   <stop stopColor="#2563EB" />
-                  <stop offset="1" stopColor="#F97316" />
+                  <stop offset="1" stopColor="#EA580C" />
                 </linearGradient>
               </defs>
             </svg>
           </div>
           <div className="brand-title-wrap">
             <span className="brand-name">
-              CBL-01 <span>ScamShield</span>
+              Scam <span style={{ color: '#EA580C' }}>Detector</span>
             </span>
-            <span className="brand-tagline">Multilingual Scam SMS &amp; Link Detector</span>
+            <span className="brand-tagline">Check Before You Click. • CBL-01</span>
           </div>
         </a>
 
@@ -50,11 +52,11 @@ export default function Navbar({ onQuickUrlSearch, onReportClick }) {
           <input
             type="text"
             className="nav-search-input"
-            placeholder="Paste a URL or SMS to check..."
+            placeholder="Paste a URL to check..."
             value={urlInput}
             onChange={(e) => setUrlInput(e.target.value)}
           />
-          <button type="submit" className="nav-search-btn-round" title="Analyze Link">
+          <button type="submit" className="nav-search-btn-round" title="Check URL">
             <FaArrowUp style={{ transform: 'rotate(45deg)' }} />
           </button>
         </form>

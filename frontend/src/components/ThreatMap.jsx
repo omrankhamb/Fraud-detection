@@ -7,7 +7,7 @@ const RECENT_PATTERNS = [
     theme: 'UPI Fraud',
     city: 'Pune',
     state: 'Maharashtra',
-    snippet: 'Fake PhonePe cashback reward link demanding UPI PIN to receive money',
+    snippet: 'Fake PhonePe cashback reward link requesting UPI PIN to receive money',
     loss: '₹4,999',
     time: '2 mins ago',
   },
@@ -17,15 +17,15 @@ const RECENT_PATTERNS = [
     state: 'Delhi',
     snippet: 'Fake CBI narcotics summons via Skype video call threatening digital arrest',
     loss: '₹4,50,000',
-    time: '9 mins ago',
+    time: '8 mins ago',
   },
   {
     theme: 'Electricity Disconnection',
     city: 'Mumbai',
     state: 'Maharashtra',
-    snippet: 'Urgent notice claiming electricity power cutoff tonight at 9:30 PM',
+    snippet: 'Urgent notice claiming electricity power cutoff tonight at 9:30 PM for unpaid bill',
     loss: '₹12,000',
-    time: '18 mins ago',
+    time: '15 mins ago',
   },
   {
     theme: 'Part-Time Task Scam',
@@ -33,7 +33,15 @@ const RECENT_PATTERNS = [
     state: 'Karnataka',
     snippet: 'Telegram task scam promising ₹3000 daily for liking YouTube videos',
     loss: '₹65,000',
-    time: '28 mins ago',
+    time: '24 mins ago',
+  },
+  {
+    theme: 'SBI YONO KYC Phishing',
+    city: 'Lucknow',
+    state: 'Uttar Pradesh',
+    snippet: 'Dear customer your account has been blocked, update PAN on sbi-kyc-verify.net',
+    loss: '₹84,000',
+    time: '35 mins ago',
   },
 ];
 
@@ -56,63 +64,80 @@ export default function ThreatMap() {
       style={{
         background: '#070d18',
         paddingTop: 80,
-        paddingBottom: 70,
+        paddingBottom: 80,
         position: 'relative',
         overflow: 'hidden',
       }}
     >
       <div className="container">
-        {/* Title matching Screenshot 6 */}
+        {/* Title */}
         <div className="text-center mb-4">
-          <h2 className="display-6 fw-bold text-white mb-2">
-            Live Threat Radar: Recent Smishing Patterns
+          <h2
+            style={{
+              fontFamily: "'Plus Jakarta Sans', sans-serif",
+              fontSize: 'clamp(26px, 3.8vw, 42px)',
+              fontWeight: 800,
+              color: '#ffffff',
+              marginBottom: 12,
+            }}
+          >
+            Recent Scam Patterns Across World
           </h2>
-          <p className="text-secondary mx-auto small" style={{ maxWidth: 560 }}>
-            Real-time cyber fraud intelligence based on reports from I4C, CERT-In, and CBL-01 detection nodes.
+          <p style={{ fontSize: '16px', color: '#8fa3bc', lineHeight: 1.6, maxWidth: 540, margin: '0 auto' }}>
+            Based on recent checks run by CBL-01 users and verified national cybercrime feeds.
           </p>
         </div>
 
-        {/* 3D Rotating Three.js Earth Canvas Container */}
-        <div className="position-relative d-flex justify-content-center align-items-center">
+        {/* 3D Interactive World Globe */}
+        <div className="position-relative d-flex justify-content-center align-items-center" style={{ minHeight: '750px' }}>
           <ThreeGlobe />
 
-          {/* Left Overlay Card matching Screenshot 6 */}
+          {/* Authentic Corner-Bordered Incident Card matching ScamDekho */}
           <div
             style={{
               position: 'absolute',
-              bottom: 30,
-              left: 20,
-              zIndex: 10,
+              left: '4%',
+              bottom: '10%',
               maxWidth: 320,
+              zIndex: 10,
+              pointerEvents: 'none',
             }}
           >
             <AnimatePresence mode="wait">
               <motion.div
                 key={activePattern.theme}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 20 }}
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -15 }}
                 transition={{ duration: 0.35 }}
-                className="p-3 rounded-3"
                 style={{
-                  background: 'rgba(15, 23, 42, 0.88)',
-                  backdropFilter: 'blur(12px)',
-                  border: '1px solid rgba(59, 130, 246, 0.3)',
-                  boxShadow: '0 12px 30px rgba(0, 0, 0, 0.5)',
+                  position: 'relative',
+                  border: '1px dashed rgba(46, 123, 214, 0.65)',
+                  padding: '16px 20px',
+                  background: 'rgba(7, 17, 31, 0.94)',
+                  backdropFilter: 'blur(8px)',
+                  boxShadow: '0 12px 30px rgba(0, 0, 0, 0.6)',
                 }}
               >
+                {/* 4 Tech Corner Brackets */}
+                <span style={{ position: 'absolute', top: -1, left: -1, width: 9, height: 9, borderTop: '2px solid #2E7BD6', borderLeft: '2px solid #2E7BD6' }} />
+                <span style={{ position: 'absolute', top: -1, right: -1, width: 9, height: 9, borderTop: '2px solid #2E7BD6', borderRight: '2px solid #2E7BD6' }} />
+                <span style={{ position: 'absolute', bottom: -1, left: -1, width: 9, height: 9, borderBottom: '2px solid #2E7BD6', borderLeft: '2px solid #2E7BD6' }} />
+                <span style={{ position: 'absolute', bottom: -1, right: -1, width: 9, height: 9, borderBottom: '2px solid #2E7BD6', borderRight: '2px solid #2E7BD6' }} />
+
                 <div className="d-flex align-items-center gap-2 mb-1">
                   <span
                     style={{
                       width: 8,
                       height: 8,
                       borderRadius: '50%',
-                      background: '#f97316',
-                      boxShadow: '0 0 8px #f97316',
+                      background: '#F97316',
+                      boxShadow: '0 0 8px #F97316',
                     }}
                   />
                   <span
                     style={{
+                      fontFamily: "'IBM Plex Mono', monospace, sans-serif",
                       fontSize: '0.68rem',
                       fontWeight: 700,
                       color: '#94a3b8',
@@ -124,17 +149,14 @@ export default function ThreatMap() {
                   </span>
                 </div>
 
-                <h6 className="fw-bold text-white mb-0" style={{ fontSize: '1rem' }}>
+                <h6 className="fw-bold text-white mb-0" style={{ fontSize: '1.05rem' }}>
                   {activePattern.theme}
                 </h6>
-                <div className="text-secondary small mb-2" style={{ fontSize: '0.78rem' }}>
+                <div className="text-secondary small mb-2" style={{ fontSize: '0.8rem' }}>
                   {activePattern.city}, {activePattern.state} • {activePattern.time}
                 </div>
 
-                <p
-                  className="text-white-50 small mb-2"
-                  style={{ fontSize: '0.78rem', lineHeight: 1.4 }}
-                >
+                <p className="text-white-50 small mb-2" style={{ fontSize: '0.8rem', lineHeight: 1.45 }}>
                   "{activePattern.snippet}"
                 </p>
 
@@ -147,47 +169,45 @@ export default function ThreatMap() {
           </div>
         </div>
 
-        {/* Legend at the bottom of the globe matching Screenshot 6 */}
-        <div className="d-flex flex-wrap justify-content-center align-items-center gap-4 mt-3 pt-2 text-secondary small">
+        {/* Threat Severity Legend matching Screenshot 6 */}
+        <div className="d-flex flex-wrap justify-content-center align-items-center gap-4 mt-3 pt-3 border-top border-secondary border-opacity-25 text-secondary small">
           <div className="d-flex align-items-center gap-2">
             <span
               style={{
-                width: 8,
-                height: 8,
+                width: 9,
+                height: 9,
                 borderRadius: '50%',
-                background: '#f59e0b',
-                boxShadow: '0 0 6px #f59e0b',
+                background: '#F59E0B',
+                boxShadow: '0 0 8px #F59E0B',
               }}
             />
-            <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Low severity scam</span>
+            <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>Low severity scam</span>
           </div>
 
           <div className="d-flex align-items-center gap-2">
             <span
               style={{
-                width: 8,
-                height: 8,
+                width: 9,
+                height: 9,
                 borderRadius: '50%',
-                background: '#f97316',
-                boxShadow: '0 0 6px #f97316',
+                background: '#F97316',
+                boxShadow: '0 0 8px #F97316',
               }}
             />
-            <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>High severity scam</span>
+            <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>High severity scam</span>
           </div>
 
           <div className="d-flex align-items-center gap-2">
             <span
               style={{
-                width: 8,
-                height: 8,
+                width: 9,
+                height: 9,
                 borderRadius: '50%',
-                background: '#ef4444',
-                boxShadow: '0 0 6px #ef4444',
+                background: '#EF4444',
+                boxShadow: '0 0 8px #EF4444',
               }}
             />
-            <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
-              Critical scam / urgent response only
-            </span>
+            <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>Critical scam / urgent response only</span>
           </div>
         </div>
       </div>

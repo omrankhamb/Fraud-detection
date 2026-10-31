@@ -276,16 +276,17 @@ Action: National Cyber Helpline 1930 / cybercrime.gov.in`;
             {/* Mode Switcher Tabs */}
             <div
               className="p-1 rounded-pill border d-inline-flex align-items-center flex-wrap gap-1"
-              style={{ background: '#f1f5f9' }}
+              style={{ background: '#f1f5f9', borderColor: '#cbd5e1' }}
             >
               <button
                 type="button"
                 className="btn btn-sm rounded-pill px-3 py-2 fw-semibold d-flex align-items-center gap-2"
                 style={{
-                  background: activeTab === 'message' ? '#0f172a' : 'transparent',
-                  color: activeTab === 'message' ? '#ffffff' : '#64748b',
-                  border: 'none',
-                  boxShadow: activeTab === 'message' ? '0 2px 8px rgba(15,23,42,0.2)' : 'none',
+                  background: activeTab === 'message' ? '#0f172a' : '#ffffff',
+                  color: activeTab === 'message' ? '#ffffff' : '#334155',
+                  border: activeTab === 'message' ? '1px solid #0f172a' : '1px solid #cbd5e1',
+                  boxShadow: activeTab === 'message' ? '0 3px 10px rgba(15,23,42,0.25)' : '0 1px 3px rgba(0,0,0,0.05)',
+                  transition: 'all 0.2s ease',
                 }}
                 onClick={() => {
                   setActiveTab('message');
@@ -300,10 +301,11 @@ Action: National Cyber Helpline 1930 / cybercrime.gov.in`;
                 type="button"
                 className="btn btn-sm rounded-pill px-3 py-2 fw-semibold d-flex align-items-center gap-2"
                 style={{
-                  background: activeTab === 'url' ? '#0f172a' : 'transparent',
-                  color: activeTab === 'url' ? '#ffffff' : '#64748b',
-                  border: 'none',
-                  boxShadow: activeTab === 'url' ? '0 2px 8px rgba(15,23,42,0.2)' : 'none',
+                  background: activeTab === 'url' ? '#0f172a' : '#ffffff',
+                  color: activeTab === 'url' ? '#ffffff' : '#334155',
+                  border: activeTab === 'url' ? '1px solid #0f172a' : '1px solid #cbd5e1',
+                  boxShadow: activeTab === 'url' ? '0 3px 10px rgba(15,23,42,0.25)' : '0 1px 3px rgba(0,0,0,0.05)',
+                  transition: 'all 0.2s ease',
                 }}
                 onClick={() => {
                   setActiveTab('url');
@@ -318,10 +320,11 @@ Action: National Cyber Helpline 1930 / cybercrime.gov.in`;
                 type="button"
                 className="btn btn-sm rounded-pill px-3 py-2 fw-semibold d-flex align-items-center gap-2"
                 style={{
-                  background: activeTab === 'pure-text' ? '#0f172a' : 'transparent',
-                  color: activeTab === 'pure-text' ? '#ffffff' : '#64748b',
-                  border: 'none',
-                  boxShadow: activeTab === 'pure-text' ? '0 2px 8px rgba(15,23,42,0.2)' : 'none',
+                  background: activeTab === 'pure-text' ? '#0f172a' : '#ffffff',
+                  color: activeTab === 'pure-text' ? '#ffffff' : '#334155',
+                  border: activeTab === 'pure-text' ? '1px solid #0f172a' : '1px solid #cbd5e1',
+                  boxShadow: activeTab === 'pure-text' ? '0 3px 10px rgba(15,23,42,0.25)' : '0 1px 3px rgba(0,0,0,0.05)',
+                  transition: 'all 0.2s ease',
                 }}
                 onClick={() => {
                   setActiveTab('pure-text');
@@ -344,12 +347,22 @@ Action: National Cyber Helpline 1930 / cybercrime.gov.in`;
                 <button
                   key={idx}
                   type="button"
-                  className="btn btn-sm rounded-pill px-3 py-1 text-start small border"
+                  className="btn btn-sm rounded-pill px-3 py-1.5 text-start small border shadow-sm"
                   style={{
                     background: '#ffffff',
-                    color: '#334155',
+                    color: '#1e293b',
+                    borderColor: '#cbd5e1',
                     fontSize: '0.82rem',
-                    fontWeight: 500,
+                    fontWeight: 600,
+                    transition: 'all 0.15s ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = '#ea580c';
+                    e.currentTarget.style.transform = 'translateY(-1px)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = '#cbd5e1';
+                    e.currentTarget.style.transform = 'translateY(0px)';
                   }}
                   onClick={() => handleLoadSample(s)}
                 >
@@ -585,16 +598,21 @@ Action: National Cyber Helpline 1930 / cybercrime.gov.in`;
                         <span className="fw-bold small text-dark">Analyzed Content</span>
                         <button
                           type="button"
-                          className="btn btn-link btn-sm text-decoration-none p-0 text-secondary"
+                          className="btn btn-sm px-3 py-1 rounded-pill fw-semibold border shadow-sm"
+                          style={{
+                            background: copied ? '#dcfce7' : '#ffffff',
+                            borderColor: copied ? '#86efac' : '#cbd5e1',
+                            color: copied ? '#15803d' : '#334155',
+                          }}
                           onClick={handleCopyReport}
                         >
                           {copied ? (
-                            <span className="text-success small fw-semibold">
-                              <FaCheck className="me-1" /> Copied Report!
+                            <span className="small fw-semibold d-inline-flex align-items-center gap-1">
+                              <FaCheck /> Copied Report!
                             </span>
                           ) : (
-                            <span className="small">
-                              <FaCopy className="me-1" /> Copy Incident Report
+                            <span className="small d-inline-flex align-items-center gap-1">
+                              <FaCopy /> Copy Incident Report
                             </span>
                           )}
                         </button>
@@ -618,27 +636,36 @@ Action: National Cyber Helpline 1930 / cybercrime.gov.in`;
                         <div className="btn-group btn-group-sm">
                           <button
                             type="button"
-                            className={`btn btn-sm ${
-                              activeLangTab === 'en' ? 'btn-dark' : 'btn-outline-secondary'
-                            }`}
+                            className="btn btn-sm fw-semibold"
+                            style={{
+                              background: activeLangTab === 'en' ? '#0f172a' : '#f1f5f9',
+                              color: activeLangTab === 'en' ? '#ffffff' : '#334155',
+                              border: '1px solid #cbd5e1',
+                            }}
                             onClick={() => setActiveLangTab('en')}
                           >
                             English
                           </button>
                           <button
                             type="button"
-                            className={`btn btn-sm ${
-                              activeLangTab === 'hi' ? 'btn-dark' : 'btn-outline-secondary'
-                            }`}
+                            className="btn btn-sm fw-semibold"
+                            style={{
+                              background: activeLangTab === 'hi' ? '#0f172a' : '#f1f5f9',
+                              color: activeLangTab === 'hi' ? '#ffffff' : '#334155',
+                              border: '1px solid #cbd5e1',
+                            }}
                             onClick={() => setActiveLangTab('hi')}
                           >
                             हिंदी
                           </button>
                           <button
                             type="button"
-                            className={`btn btn-sm ${
-                              activeLangTab === 'mr' ? 'btn-dark' : 'btn-outline-secondary'
-                            }`}
+                            className="btn btn-sm fw-semibold"
+                            style={{
+                              background: activeLangTab === 'mr' ? '#0f172a' : '#f1f5f9',
+                              color: activeLangTab === 'mr' ? '#ffffff' : '#334155',
+                              border: '1px solid #cbd5e1',
+                            }}
                             onClick={() => setActiveLangTab('mr')}
                           >
                             मराठी
@@ -697,6 +724,22 @@ Action: National Cyber Helpline 1930 / cybercrime.gov.in`;
                         )}
                       </div>
                     )}
+
+                    <div className="d-flex justify-content-end mt-4 pt-3 border-top">
+                      <button
+                        type="button"
+                        className="btn btn-sm px-4 py-2 rounded-pill fw-bold shadow-sm"
+                        style={{ background: '#f1f5f9', color: '#0f172a', border: '1px solid #cbd5e1' }}
+                        onClick={() => {
+                          setMessageText('');
+                          setSenderId('');
+                          setUrlInput('');
+                          setResult(null);
+                        }}
+                      >
+                        Check Another Message / Link
+                      </button>
+                    </div>
                   </div>
                 </div>
               </motion.div>

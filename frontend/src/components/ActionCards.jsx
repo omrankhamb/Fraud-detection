@@ -202,13 +202,21 @@ export default function ActionCards({ onSelectCard }) {
                 </p>
 
                 {/* Card Action Button */}
-                <div className="pt-3 border-top border-light d-flex align-items-center justify-content-between">
-                  <span className="fw-semibold small d-inline-flex align-items-center gap-2" style={{ color: item.iconColor }}>
+                <div className="pt-3 border-top border-light d-flex align-items-center justify-content-between mt-auto">
+                  <button
+                    type="button"
+                    className="btn btn-sm rounded-pill px-3 py-1.5 fw-semibold d-inline-flex align-items-center gap-2 shadow-sm"
+                    style={{
+                      background: item.iconBg,
+                      color: item.iconColor,
+                      border: `1px solid ${item.iconColor}40`,
+                    }}
+                  >
                     <span>{item.ctaText}</span>
-                    <FaArrowRight size={12} />
-                  </span>
-                  <span className="text-muted small" style={{ fontSize: '0.74rem' }}>
-                    Click to load ↵
+                    <FaArrowRight size={11} />
+                  </button>
+                  <span className="text-muted small fw-semibold" style={{ fontSize: '0.74rem' }}>
+                    Load in scanner ↵
                   </span>
                 </div>
               </div>

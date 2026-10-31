@@ -1,15 +1,14 @@
 @import "bootstrap/dist/css/bootstrap.min.css";
 
 :root {
-  --primary-orange: #e26a2c;
-  --primary-orange-hover: #cf5719;
+  --primary-orange: #ea580c;
+  --primary-orange-hover: #c2410c;
   --primary-blue: #2563eb;
-  --dark-navy: #151e32;
-  --dark-navy-deep: #090e1a;
-  --ivory-bg: #fbf8f2;
-  --text-dark: #111827;
+  --dark-navy: #0f172a;
+  --dark-navy-deep: #070d18;
+  --text-dark: #0f172a;
   --text-muted: #64748b;
-  --border-light: #e5e7eb;
+  --border-light: #e2e8f0;
   --font-heading: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
@@ -32,13 +31,13 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
   font-weight: 800;
   letter-spacing: -0.03em;
-  color: #111827;
+  color: #0f172a;
 }
 
-/* Floating Top Pill Navbar matching ScamDekho */
+/* Floating Navbar */
 .floating-navbar-container {
   position: fixed;
-  top: 18px;
+  top: 16px;
   left: 0;
   right: 0;
   z-index: 1050;
@@ -53,17 +52,16 @@ h1, h2, h3, h4, h5, h6 {
   background: #ffffff;
   border: 1px solid #eef2f6;
   border-radius: 9999px;
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.07), 0 4px 10px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
   padding: 8px 18px 8px 24px;
   display: flex;
   align-items: center;
-  gap: 24px;
+  justify-content: space-between;
+  gap: 20px;
   width: 100%;
   max-width: 1180px;
-  transition: all 0.3s ease;
 }
 
-/* Authentic Logo */
 .brand-logo-container {
   display: flex;
   align-items: center;
@@ -72,9 +70,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .brand-icon-shield {
-  width: 42px;
-  height: 42px;
-  position: relative;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -83,15 +80,15 @@ h1, h2, h3, h4, h5, h6 {
 .brand-title-wrap {
   display: flex;
   flex-direction: column;
-  line-height: 1;
+  line-height: 1.1;
 }
 
 .brand-name {
   font-family: var(--font-heading);
   font-weight: 900;
-  font-size: 1.45rem;
-  color: #1e293b;
-  letter-spacing: -0.04em;
+  font-size: 1.35rem;
+  color: #0f172a;
+  letter-spacing: -0.03em;
 }
 
 .brand-name span {
@@ -99,18 +96,16 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .brand-tagline {
-  font-size: 0.68rem;
+  font-size: 0.65rem;
   font-weight: 600;
-  font-style: italic;
-  color: var(--primary-orange);
-  margin-top: 3px;
-  letter-spacing: 0.01em;
+  color: #64748b;
+  letter-spacing: 0.02em;
 }
 
-/* Navbar Search Input Pill */
+/* Nav Search Bar */
 .nav-search-bar {
   flex: 1;
-  max-width: 320px;
+  max-width: 340px;
   position: relative;
   display: flex;
   align-items: center;
@@ -118,20 +113,20 @@ h1, h2, h3, h4, h5, h6 {
 
 .nav-search-input {
   width: 100%;
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
   border-radius: 9999px;
-  padding: 9px 46px 9px 36px;
+  padding: 8px 46px 8px 36px;
   font-size: 0.85rem;
-  color: #1e293b;
+  color: #0f172a;
   outline: none;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) inset;
   transition: all 0.2s ease;
 }
 
 .nav-search-input:focus {
   border-color: var(--primary-blue);
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
 }
 
 .nav-search-icon-left {
@@ -148,7 +143,7 @@ h1, h2, h3, h4, h5, h6 {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: #2563eb;
+  background: var(--primary-blue);
   border: none;
   color: #ffffff;
   display: flex;
@@ -168,62 +163,60 @@ h1, h2, h3, h4, h5, h6 {
 .nav-links-list {
   display: flex;
   align-items: center;
-  gap: 22px;
+  gap: 20px;
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
 .nav-links-list a {
-  font-size: 0.92rem;
-  font-weight: 500;
-  color: #475569;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #334155;
   text-decoration: none;
   transition: color 0.2s;
-  display: flex;
-  align-items: center;
-  gap: 4px;
 }
 
 .nav-links-list a:hover {
   color: var(--primary-orange);
 }
 
+/* All Buttons Styling */
 .btn-report-orange {
-  background: linear-gradient(135deg, #e26a2c 0%, #ea580c 100%);
+  background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
   color: #ffffff !important;
-  font-weight: 600;
-  font-size: 0.9rem;
-  padding: 10px 22px;
+  font-weight: 700;
+  font-size: 0.88rem;
+  padding: 9px 20px;
   border-radius: 9999px;
   text-decoration: none;
   border: none;
   cursor: pointer;
-  box-shadow: 0 4px 14px rgba(226, 106, 44, 0.3);
+  box-shadow: 0 4px 14px rgba(234, 88, 12, 0.35);
   transition: all 0.2s ease;
   white-space: nowrap;
 }
 
 .btn-report-orange:hover {
-  background: linear-gradient(135deg, #cf5719 0%, #c2410c 100%);
   transform: translateY(-1px);
-  box-shadow: 0 6px 18px rgba(226, 106, 44, 0.4);
+  box-shadow: 0 6px 18px rgba(234, 88, 12, 0.45);
 }
 
 /* Hero Section */
 .hero-outer-section {
-  padding-top: 140px;
-  padding-bottom: 40px;
+  padding-top: 130px;
+  padding-bottom: 50px;
   position: relative;
   overflow: hidden;
+  background: #ffffff;
 }
 
 .hero-main-title {
-  font-size: 3.5rem;
-  line-height: 1.12;
+  font-size: clamp(2.4rem, 4vw, 3.4rem);
+  line-height: 1.15;
   font-weight: 800;
   letter-spacing: -0.03em;
-  color: #111827;
+  color: #0f172a;
   margin-bottom: 20px;
 }
 
@@ -235,283 +228,242 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 1.05rem;
   line-height: 1.6;
   color: #475569;
-  max-width: 540px;
+  max-width: 550px;
   margin-bottom: 24px;
 }
 
-/* Feature Badge Pills matching ScamDekho */
 .scamdekho-pill {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
   border-radius: 9999px;
   padding: 7px 16px;
   font-size: 0.82rem;
-  font-weight: 500;
-  color: #475569;
+  font-weight: 600;
+  color: #334155;
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
-  white-space: nowrap;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
 }
 
-/* 3D Visual Shield Card matching Screenshot 4 */
-.shield-card-outer {
-  position: relative;
-  width: 100%;
-  max-width: 480px;
-  margin: 0 auto;
-  aspect-ratio: 1.08;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.shield-card-layer-bg {
-  position: absolute;
-  width: 90%;
-  height: 90%;
-  background: #fbf7ee;
-  border-radius: 44px;
-  box-shadow: 0 20px 45px rgba(230, 220, 200, 0.4);
-  transform: rotate(-3deg);
-}
-
-.shield-card-layer-front {
-  position: relative;
-  width: 86%;
-  height: 86%;
-  background: #fdfaf3;
-  border: 1px solid rgba(255, 255, 255, 0.8);
-  border-radius: 40px;
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.04), 0 10px 20px rgba(0, 0, 0, 0.02);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Dark Navy Shield Shape */
-.shield-dark-badge {
-  position: relative;
-  width: 160px;
-  height: 190px;
-  background: linear-gradient(145deg, #1d283e 0%, #111a2d 100%);
-  border-radius: 48px 48px 80px 80px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 20px 35px rgba(17, 26, 45, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-}
-
-/* Golden Padlock */
-.golden-padlock-wrap {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.padlock-shackle {
-  width: 44px;
-  height: 38px;
-  border: 7px solid #e5a45b;
-  border-bottom: none;
-  border-radius: 22px 22px 0 0;
-  margin-bottom: -5px;
-}
-
-.padlock-body {
-  width: 68px;
-  height: 52px;
-  background: linear-gradient(135deg, #f5b76f 0%, #d88934 100%);
-  border-radius: 14px;
-  box-shadow: 0 6px 16px rgba(216, 137, 52, 0.4), 0 1px 2px rgba(255, 255, 255, 0.4) inset;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.padlock-keyhole {
-  width: 10px;
-  height: 15px;
-  background: #603a11;
-  border-radius: 5px 5px 3px 3px;
-  position: relative;
-}
-
-.padlock-keyhole::after {
-  content: "";
-  position: absolute;
-  top: 10px;
-  left: 3px;
-  width: 4px;
-  height: 8px;
-  background: #603a11;
-}
-
-/* Floating 3D Spheres */
-/* Hero Animations matching ScamDekho Inspector Snippets */
+/* Hero Animations matching ScamDekho with Noticeable, Dynamic Movement */
 @keyframes sd-heroRise {
-  0% {
+  from {
     opacity: 0;
     transform: translateY(28px) scale(0.97);
   }
-  100% {
+  to {
     opacity: 1;
     transform: translateY(0) scale(1);
   }
 }
 
-@keyframes sd-heroHalo {
+@keyframes sd-heroTiltA {
   0%, 100% {
-    transform: scale(1) translateZ(0);
-    opacity: 0.76;
+    transform: rotate(-21deg) translateY(0);
   }
   50% {
-    transform: scale(1.12) translateZ(0);
+    transform: rotate(-14deg) translateY(-14px);
+  }
+}
+
+@keyframes sd-heroTiltB {
+  0%, 100% {
+    transform: rotate(15deg) translateY(0);
+  }
+  50% {
+    transform: rotate(7deg) translateY(-18px);
+  }
+}
+
+@keyframes sd-heroTiltC {
+  0%, 100% {
+    transform: rotate(-8deg) translateY(0);
+  }
+  50% {
+    transform: rotate(-1deg) translateY(-12px);
+  }
+}
+
+@keyframes sd-shieldSway {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(4px, -10px, 0) rotate(-1.6deg);
+  }
+}
+
+@keyframes sd-lockLift {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1, 1);
+    animation-timing-function: cubic-bezier(0.30, 0.02, 0.36, 1);
+  }
+  38% {
+    transform: translate3d(1.8%, -15%, 0) rotate(-4.2deg) scale(0.99, 1.015);
+    animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1);
+  }
+  54% {
+    transform: translate3d(2%, -16%, 0) rotate(-3.6deg) scale(1, 1);
+    animation-timing-function: cubic-bezier(0.44, 0, 0.52, 1);
+  }
+  90% {
+    transform: translate3d(0.2%, -0.6%, 0) rotate(-0.3deg) scale(1.015, 0.985);
+    animation-timing-function: cubic-bezier(0.32, 0, 0.3, 1);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1, 1);
+  }
+}
+
+@keyframes sd-lockShadow {
+  0% {
+    transform: translate3d(-50%, -50%, 0) scale(1);
+    opacity: 0.38;
+    animation-timing-function: cubic-bezier(0.30, 0.02, 0.36, 1);
+  }
+  38% {
+    transform: translate3d(-50%, -50%, 0) scale(0.64);
+    opacity: 0.12;
+    animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1);
+  }
+  54% {
+    transform: translate3d(-50%, -50%, 0) scale(0.60);
+    opacity: 0.11;
+    animation-timing-function: cubic-bezier(0.44, 0, 0.52, 1);
+  }
+  90% {
+    transform: translate3d(-50%, -50%, 0) scale(1.06);
+    opacity: 0.42;
+    animation-timing-function: cubic-bezier(0.32, 0, 0.3, 1);
+  }
+  100% {
+    transform: translate3d(-50%, -50%, 0) scale(1);
+    opacity: 0.38;
+  }
+}
+
+@keyframes sd-heroDriftA {
+  0%, 100% {
+    transform: translate3d(0, 0, 0);
+  }
+  33% {
+    transform: translate3d(-16px, 16px, 0);
+  }
+  68% {
+    transform: translate3d(10px, -18px, 0);
+  }
+}
+
+@keyframes sd-heroDriftB {
+  0%, 100% {
+    transform: translate3d(0, 0, 0);
+  }
+  40% {
+    transform: translate3d(-14px, -18px, 0);
+  }
+  72% {
+    transform: translate3d(8px, 12px, 0);
+  }
+}
+
+@keyframes sd-heroDriftC {
+  0%, 100% {
+    transform: translate3d(0, 0, 0);
+  }
+  28% {
+    transform: translate3d(16px, 8px, 0);
+  }
+  60% {
+    transform: translate3d(-12px, -14px, 0);
+  }
+}
+
+@keyframes sd-heroHalo {
+  0%, 100% {
+    opacity: 0.8;
+    transform: scale(0.97) translateZ(0);
+  }
+  50% {
     opacity: 1;
+    transform: scale(1.08) translateZ(0);
   }
 }
 
 @keyframes sd-heroOrb {
   0%, 100% {
-    transform: translate(0px, 0px);
+    transform: translate(0, 0);
   }
   50% {
-    transform: translate(20px, -16px);
+    transform: translate(-18px, -24px);
   }
 }
 
-@keyframes sd-sphereFloat1 {
+@keyframes sd-heroOrbAlt {
   0%, 100% {
-    transform: translateY(0px);
+    transform: translate(0, 0);
   }
   50% {
-    transform: translateY(-12px);
+    transform: translate(22px, 22px);
   }
 }
 
-@keyframes sd-sphereFloat2 {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(10px);
-  }
+/* Service Checker Cards */
+.service-checker-card {
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 28px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  cursor: pointer;
 }
 
-@keyframes sd-shieldBreath {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-6px);
-  }
+.service-checker-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.08);
+  border-color: #cbd5e1;
 }
 
-.sphere-floating-amber {
-  position: absolute;
-  top: 12%;
-  right: 6%;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, #fbbd6d 0%, #d97706 75%, #92400e 100%);
-  box-shadow: 0 10px 20px rgba(217, 119, 6, 0.3);
-  animation: sd-sphereFloat1 6s ease-in-out infinite;
-}
-
-.sphere-floating-ivory {
-  position: absolute;
-  top: 48%;
-  left: 2%;
+.service-card-icon-wrap {
   width: 52px;
   height: 52px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, #ffffff 0%, #fef3c7 60%, #fde68a 100%);
-  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.06);
-  animation: sd-sphereFloat2 7s ease-in-out infinite;
-}
-
-.sphere-floating-navy {
-  position: absolute;
-  bottom: 12%;
-  right: 14%;
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, #334155 0%, #0f172a 100%);
-  box-shadow: 0 6px 12px rgba(15, 23, 42, 0.3);
-  animation: sd-sphereFloat1 8s ease-in-out infinite reverse;
-}
-
-/* Floating Widget Pill matching Screenshot (✕ 📰 Audit Security) */
-.floating-bottom-pill-scamdekho {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  z-index: 1040;
-  background: #bfdbfe;
-  border: 2px solid transparent;
-  background-clip: padding-box;
-  border-radius: 9999px;
-  padding: 8px 20px;
+  border-radius: 14px;
+  background: #f1f5f9;
   display: flex;
   align-items: center;
-  gap: 10px;
-  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.25);
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-  box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.3), 0 8px 20px rgba(0, 0, 0, 0.08);
+  justify-content: center;
+  font-size: 1.4rem;
+  color: var(--primary-blue);
+  margin-bottom: 18px;
 }
 
-.floating-bottom-pill-scamdekho:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.5), 0 12px 28px rgba(0, 0, 0, 0.12);
-}
-
-/* Cookie Banner matching Screenshot */
-.cookie-banner-container {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: #ffffff;
-  border-top: 1px solid #e2e8f0;
-  padding: 16px 28px;
-  z-index: 1030;
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
-}
-
-.btn-cookie-customise {
-  background: #ffffff;
-  border: 1px solid #2563eb;
-  color: #2563eb;
-  font-size: 0.85rem;
-  font-weight: 600;
-  padding: 8px 20px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.btn-cookie-reject {
-  background: #2563eb;
-  border: 1px solid #2563eb;
+/* Scale of It Banner */
+.scale-banner-card {
+  background: var(--dark-navy);
+  border-radius: 24px;
+  padding: 40px;
   color: #ffffff;
-  font-size: 0.85rem;
-  font-weight: 600;
-  padding: 8px 20px;
-  border-radius: 6px;
-  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(7, 13, 24, 0.3);
 }
 
-.btn-cookie-accept {
-  background: #2563eb;
-  border: 1px solid #2563eb;
-  color: #ffffff;
-  font-size: 0.85rem;
-  font-weight: 600;
-  padding: 8px 20px;
-  border-radius: 6px;
-  cursor: pointer;
+.stat-item-number {
+  font-size: 2.75rem;
+  font-weight: 800;
+  font-family: var(--font-heading);
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  border-bottom: 3px solid var(--primary-blue);
+  padding-bottom: 8px;
+  display: inline-block;
+  margin-bottom: 12px;
+}
+
+.stat-item-number.orange {
+  color: #f97316;
+  border-bottom-color: #f97316;
 }

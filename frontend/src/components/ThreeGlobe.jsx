@@ -1,295 +1,232 @@
 import React, { useEffect, useRef } from 'react';
+import Globe from 'globe.gl';
 import * as THREE from 'three';
 
-function latLonToVector3(lat, lon, radius) {
-  const phi = (90 - lat) * (Math.PI / 180);
-  const theta = (lon + 180) * (Math.PI / 180);
-  const x = -(radius * Math.sin(phi) * Math.cos(theta));
-  const z = radius * Math.sin(phi) * Math.sin(theta);
-  const y = radius * Math.cos(phi);
-  return new THREE.Vector3(x, y, z);
-}
-
-const THREAT_POINTS = [
-  { name: 'Pune, Maharashtra', lat: 18.5204, lon: 73.8567, color: 0xf97316 },
-  { name: 'Delhi NCR', lat: 28.6139, lon: 77.2090, color: 0xef4444 },
-  { name: 'Mumbai, Maharashtra', lat: 19.0760, lon: 72.8777, color: 0xf97316 },
-  { name: 'Bengaluru, Karnataka', lat: 12.9716, lon: 77.5946, color: 0xf97316 },
-  { name: 'Hyderabad, Telangana', lat: 17.3850, lon: 78.4867, color: 0xf59e0b },
-  { name: 'Kolkata, West Bengal', lat: 22.5726, lon: 88.3639, color: 0xf97316 },
-  { name: 'Ahmedabad, Gujarat', lat: 23.0225, lon: 72.5714, color: 0xf97316 },
-  { name: 'Dubai, UAE', lat: 25.2048, lon: 55.2708, color: 0xf97316 },
-  { name: 'London, UK', lat: 51.5074, lon: -0.1278, color: 0xf59e0b },
-  { name: 'Singapore', lat: 1.3521, lon: 103.8198, color: 0xf97316 },
-  { name: 'New York, USA', lat: 40.7128, lon: -74.0060, color: 0xef4444 },
+const MARKERS = [
+  { lat: 19.0760, lng: 72.8777, city: "Mumbai", state: "Maharashtra", country: "India", type: "Phishing Attack", severity: "high" },
+  { lat: 28.6139, lng: 77.2090, city: "Delhi NCR", state: "Delhi", country: "India", type: "Digital Arrest Call", severity: "high" },
+  { lat: 12.9716, lng: 77.5946, city: "Bengaluru", state: "Karnataka", country: "India", type: "Part-Time Task Scam", severity: "medium" },
+  { lat: 17.3850, lng: 78.4867, city: "Hyderabad", state: "Telangana", country: "India", type: "Job Offer Fraud", severity: "medium" },
+  { lat: 18.5204, lng: 73.8567, city: "Pune", state: "Maharashtra", country: "India", type: "UPI Cashback Fraud", severity: "high" },
+  { lat: 22.5726, lng: 88.3639, city: "Kolkata", state: "West Bengal", country: "India", type: "Lottery Scam", severity: "medium" },
+  { lat: 13.0827, lng: 80.2707, city: "Chennai", state: "Tamil Nadu", country: "India", type: "Customs Parcel Extortion", severity: "medium" },
+  { lat: 26.8467, lng: 80.9462, city: "Lucknow", state: "Uttar Pradesh", country: "India", type: "SBI YONO Netbanking Phishing", severity: "high" },
+  { lat: 26.9124, lng: 75.7873, city: "Jaipur", state: "Rajasthan", country: "India", type: "QR Code Fraud", severity: "medium" },
+  { lat: 23.0225, lng: 72.5714, city: "Ahmedabad", state: "Gujarat", country: "India", type: "Fake Bank KYC Update", severity: "high" },
+  { lat: 51.5072, lng: -0.1276, city: "London", state: "England", country: "United Kingdom", type: "Crypto Fraud", severity: "medium" },
+  { lat: 40.7128, lng: -74.0060, city: "New York", state: "New York", country: "United States", type: "Romance Scam", severity: "medium" },
+  { lat: 1.3521, lng: 103.8198, city: "Singapore", state: "", country: "Singapore", type: "Fake Investment App", severity: "medium" },
+  { lat: 25.2048, lng: 55.2708, city: "Dubai", state: "", country: "United Arab Emirates", type: "Job Scam Ring", severity: "high" },
 ];
 
-function isLand(lat, lon) {
-  // India & South Asia
-  if (lat >= 6 && lat <= 38 && lon >= 66 && lon <= 96) return true;
-  // East & Southeast Asia
-  if (lat >= -10 && lat <= 60 && lon >= 96 && lon <= 150) return true;
-  // Middle East & Central Asia
-  if (lat >= 12 && lat <= 60 && lon >= 32 && lon <= 75) return true;
-  // Europe
-  if (lat >= 34 && lat <= 72 && lon >= -12 && lon <= 45) return true;
-  // Africa
-  if (lat >= -35 && lat <= 37 && lon >= -18 && lon <= 52) return true;
-  // North America
-  if (lat >= 15 && lat <= 72 && lon >= -168 && lon <= -52) return true;
-  // South America
-  if (lat >= -56 && lat <= 13 && lon >= -82 && lon <= -34) return true;
-  // Australia
-  if (lat >= -44 && lat <= -10 && lon >= 110 && lon <= 155) return true;
-  return false;
+function buildMarkerArcs(markers) {
+  const arcs = [];
+  for (let i = 0; i < markers.length; i++) {
+    const next = markers[(i + 1) % markers.length];
+    arcs.push({
+      startLat: markers[i].lat,
+      startLng: markers[i].lng,
+      endLat: next.lat,
+      endLng: next.lng,
+    });
+  }
+  return arcs;
 }
 
 export default function ThreeGlobe() {
-  const mountRef = useRef(null);
+  const containerRef = useRef(null);
+  const globeInstanceRef = useRef(null);
 
   useEffect(() => {
-    const container = mountRef.current;
-    if (!container) return;
+    const el = containerRef.current;
+    if (!el) return;
 
-    const width = container.clientWidth || 800;
-    const height = 580;
+    el.innerHTML = '';
 
-    // 1. Scene, Camera, Renderer
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 1000);
-    // Position camera closer so the globe fills the section nicely
-    camera.position.z = 185;
+    const width = el.clientWidth || window.innerWidth;
+    const height = Math.min(window.innerHeight * 0.9, 750);
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    // Instantiate Globe
+    const world = Globe({ rendererConfig: { antialias: true, alpha: true, powerPreference: 'high-performance' } })(el)
+      .width(width)
+      .height(height)
+      .backgroundColor('rgba(0, 0, 0, 0)')
+      .showAtmosphere(true)
+      .atmosphereColor('#2E7BD6')
+      .atmosphereAltitude(0.22)
+      .showGraticules(true)
+      .pointsData(MARKERS)
+      .pointLat('lat')
+      .pointLng('lng')
+      .pointColor((d) => (d.severity === 'high' ? '#FF3B30' : '#FF9E52'))
+      .pointAltitude(0.014)
+      .pointRadius((d) => (d.severity === 'high' ? 0.36 : 0.28))
+      .pointResolution(24)
+      .pointLabel((d) => `
+        <div style="position:relative;font-family:'IBM Plex Mono',monospace;background:rgba(7,17,31,0.94);border:1px dashed rgba(46,123,214,0.65);padding:14px 18px;min-width:196px;color:#fff;">
+          <span style="position:absolute;top:-1px;left:-1px;width:9px;height:9px;border-top:1.5px solid #2E7BD6;border-left:1.5px solid #2E7BD6;"></span>
+          <span style="position:absolute;top:-1px;right:-1px;width:9px;height:9px;border-top:1.5px solid #2E7BD6;border-right:1.5px solid #2E7BD6;"></span>
+          <span style="position:absolute;bottom:-1px;left:-1px;width:9px;height:9px;border-bottom:1.5px solid #2E7BD6;border-left:1.5px solid #2E7BD6;"></span>
+          <span style="position:absolute;bottom:-1px;right:-1px;width:9px;height:9px;border-bottom:1.5px solid #2E7BD6;border-right:1.5px solid #2E7BD6;"></span>
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;">
+            <span style="width:6px;height:6px;border-radius:50%;background:${d.severity === 'high' ? '#FF3B30' : '#FF9E52'};display:inline-block;"></span>
+            <span style="font-size:10px;font-weight:600;letter-spacing:0.06em;color:#7FB2EC;">RECENT PATTERN</span>
+          </div>
+          <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:16px;font-weight:800;color:#FFFFFF;margin-bottom:4px;">${d.type}</div>
+          <div style="font-size:12px;color:#9AB2CC;">${d.city}${d.state ? ', ' + d.state : ''}</div>
+          <div style="font-size:11px;color:#6B8199;letter-spacing:0.05em;text-transform:uppercase;margin-top:3px;">${d.country || ''}</div>
+          <div style="font-size:10px;color:#5E7590;letter-spacing:0.05em;margin-top:7px;">Reported scam pattern</div>
+        </div>
+      `)
+      .ringsData(MARKERS)
+      .ringLat('lat')
+      .ringLng('lng')
+      .ringColor((d) => (t) => `rgba(${d.severity === 'high' ? '255,59,48' : '255,158,82'},${0.9 * (1 - t)})`)
+      .ringMaxRadius(3.6)
+      .ringPropagationSpeed(1.7)
+      .ringRepeatPeriod(1500)
+      .ringAltitude(0.013)
+      .arcsData(buildMarkerArcs(MARKERS))
+      .arcStartLat('startLat')
+      .arcStartLng('startLng')
+      .arcEndLat('endLat')
+      .arcEndLng('endLng')
+      .arcColor(() => ['rgba(46,123,214,0.32)', 'rgba(46,123,214,0.04)'])
+      .arcAltitude(0.18)
+      .arcStroke(0.3)
+      .arcDashLength(0.5)
+      .arcDashGap(2)
+      .arcDashAnimateTime(3500);
 
-    const canvas = renderer.domElement;
-    canvas.setAttribute('data-engine', 'three.js r183');
-    canvas.style.display = 'block';
-    canvas.style.touchAction = 'none';
-    canvas.style.width = '100%';
-    canvas.style.height = '100%';
-    container.appendChild(canvas);
+    globeInstanceRef.current = world;
 
-    // 2. Earth Group (Tilted to showcase India & Asia in center)
-    const earthGroup = new THREE.Group();
-    earthGroup.rotation.x = 0.32;
-    earthGroup.rotation.y = -1.25;
-    scene.add(earthGroup);
+    // Lighting setup
+    world.scene().add(new THREE.AmbientLight(0xffffff, 1.8));
+    const dirLight = new THREE.DirectionalLight(0xffffff, 1.0);
+    dirLight.position.set(1, 1, 1);
+    world.scene().add(dirLight);
 
-    const GLOBE_RADIUS = 72;
+    // Glowing Sprite Texture for Hotspots
+    const glowCanvas = document.createElement('canvas');
+    glowCanvas.width = 128;
+    glowCanvas.height = 128;
+    const gctx = glowCanvas.getContext('2d');
+    const grad = gctx.createRadialGradient(64, 64, 0, 64, 64, 64);
+    grad.addColorStop(0, 'rgba(255,255,255,0.95)');
+    grad.addColorStop(0.25, 'rgba(255,158,82,0.75)');
+    grad.addColorStop(1, 'rgba(255,122,26,0)');
+    gctx.fillStyle = grad;
+    gctx.fillRect(0, 0, 128, 128);
+    const glowTexture = new THREE.CanvasTexture(glowCanvas);
+    const spriteMat = new THREE.SpriteMaterial({ map: glowTexture, color: '#FF9E52', transparent: true, depthWrite: false });
 
-    // 3. Dark Navy Core Sphere
-    const coreGeo = new THREE.SphereGeometry(GLOBE_RADIUS - 0.4, 64, 64);
-    const coreMat = new THREE.MeshBasicMaterial({
-      color: 0x070e1c,
-      transparent: true,
-      opacity: 0.96,
-    });
-    const coreMesh = new THREE.Mesh(coreGeo, coreMat);
-    earthGroup.add(coreMesh);
-
-    // 4. Subtle Latitude & Longitude Wireframe Grid
-    const wireGeo = new THREE.SphereGeometry(GLOBE_RADIUS, 24, 16);
-    const wireMat = new THREE.MeshBasicMaterial({
-      color: 0x1e3a8a,
-      wireframe: true,
-      transparent: true,
-      opacity: 0.15,
-    });
-    const wireMesh = new THREE.Mesh(wireGeo, wireMat);
-    earthGroup.add(wireMesh);
-
-    // 5. Atmosphere Glow Rim
-    const atmoGeo = new THREE.SphereGeometry(GLOBE_RADIUS + 3.2, 64, 64);
-    const atmoMat = new THREE.ShaderMaterial({
-      vertexShader: `
-        varying vec3 vNormal;
-        void main() {
-          vNormal = normalize(normalMatrix * normal);
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    world
+      .customLayerData(MARKERS)
+      .customThreeObjectUpdate((obj, d) => {
+        if (!obj || !obj.position) return;
+        const coords = world.getCoords(d.lat, d.lng, 0.02);
+        obj.position.set(coords.x, coords.y, coords.z);
+      })
+      .customThreeObject((d) => {
+        const sprite = new THREE.Sprite(spriteMat.clone());
+        if (d.severity === 'high' && sprite.material && sprite.material.color) {
+          sprite.material.color.set('#FF3B30');
         }
-      `,
-      fragmentShader: `
-        varying vec3 vNormal;
-        void main() {
-          float intensity = pow(0.68 - dot(vNormal, vec3(0, 0, 1.0)), 2.0);
-          gl_FragColor = vec4(0.24, 0.6, 1.0, 1.0) * intensity * 1.8;
-        }
-      `,
-      blending: THREE.AdditiveBlending,
-      side: THREE.BackSide,
-      transparent: true,
-    });
-    const atmoMesh = new THREE.Mesh(atmoGeo, atmoMat);
-    earthGroup.add(atmoMesh);
+        const scale = d.severity === 'high' ? 7 : 5.2;
+        sprite.scale.set(scale, scale, 1);
+        return sprite;
+      });
 
-    // 6. High-density Continental Dots (12,000 Points)
-    const dotPositions = [];
-    const dotColors = [];
-    const sampleCount = 12000;
-
-    for (let i = 0; i < sampleCount; i++) {
-      const phi = Math.acos(1 - (2 * (i + 0.5)) / sampleCount);
-      const theta = Math.PI * (1 + Math.sqrt(5)) * (i + 0.5);
-
-      const lat = 90 - (phi * 180) / Math.PI;
-      const lon = ((theta * 180) / Math.PI) % 360 - 180;
-
-      if (isLand(lat, lon)) {
-        const v = latLonToVector3(lat, lon, GLOBE_RADIUS);
-        dotPositions.push(v.x, v.y, v.z);
-
-        // Highlight India with vibrant cyan
-        if (lat >= 8 && lat <= 35 && lon >= 68 && lon <= 92) {
-          dotColors.push(0.35, 0.82, 1.0);
-        } else {
-          dotColors.push(0.18, 0.44, 0.78);
-        }
+    // Dark Globe Material
+    const applyGlobeMaterial = () => {
+      const gMat = world.globeMaterial();
+      if (!gMat) return;
+      if (gMat.color) gMat.color.set('#07111F');
+      gMat.transparent = true;
+      gMat.opacity = 0.95;
+      gMat.depthWrite = true;
+      if (gMat.emissive) {
+        gMat.emissive.set('#07111F');
+        if (typeof gMat.emissiveIntensity === 'number') gMat.emissiveIntensity = 1;
       }
+      gMat.needsUpdate = true;
+    };
+
+    if (typeof world.onGlobeReady === 'function') {
+      world.onGlobeReady(applyGlobeMaterial);
     }
+    applyGlobeMaterial();
+    setTimeout(applyGlobeMaterial, 250);
 
-    const dotGeo = new THREE.BufferGeometry();
-    dotGeo.setAttribute('position', new THREE.Float32BufferAttribute(dotPositions, 3));
-    dotGeo.setAttribute('color', new THREE.Float32BufferAttribute(dotColors, 3));
+    // Focus on India
+    world.pointOfView({ lat: 20.5937, lng: 78.9629, altitude: 2.1 }, 1000);
 
-    const dotMat = new THREE.PointsMaterial({
-      size: 1.5,
-      vertexColors: true,
-      transparent: true,
-      opacity: 0.92,
-    });
-    const dotMesh = new THREE.Points(dotGeo, dotMat);
-    earthGroup.add(dotMesh);
+    // Controls
+    const controls = world.controls();
+    controls.autoRotate = true;
+    controls.autoRotateSpeed = 0.45;
+    controls.enableZoom = false;
+    controls.enablePan = false;
+    controls.enableDamping = true;
 
-    // 7. Threat Nodes & Shockwave Pulsing Rings
-    const rings = [];
-    THREAT_POINTS.forEach((pt) => {
-      const pos = latLonToVector3(pt.lat, pt.lon, GLOBE_RADIUS + 0.6);
-
-      // Glowing center pin
-      const pinGeo = new THREE.SphereGeometry(1.4, 16, 16);
-      const pinMat = new THREE.MeshBasicMaterial({ color: pt.color });
-      const pinMesh = new THREE.Mesh(pinGeo, pinMat);
-      pinMesh.position.copy(pos);
-      earthGroup.add(pinMesh);
-
-      // Expanding pulse ring
-      const ringGeo = new THREE.RingGeometry(1.4, 2.6, 32);
-      const ringMat = new THREE.MeshBasicMaterial({
-        color: pt.color,
-        side: THREE.DoubleSide,
-        transparent: true,
-        opacity: 0.85,
-      });
-      const ringMesh = new THREE.Mesh(ringGeo, ringMat);
-      ringMesh.position.copy(pos);
-      ringMesh.lookAt(new THREE.Vector3(0, 0, 0));
-      earthGroup.add(ringMesh);
-
-      rings.push({
-        mesh: ringMesh,
-        scale: 1,
-        maxScale: 3.2,
-        speed: 0.024 + Math.random() * 0.012,
-      });
-    });
-
-    // 8. Pointer Drag-To-Rotate Interaction
-    let isDragging = false;
-    let prevMouseX = 0;
-    let prevMouseY = 0;
-    let velocityX = 0;
-    let velocityY = 0;
-
-    const onPointerDown = (e) => {
-      isDragging = true;
-      prevMouseX = e.clientX;
-      prevMouseY = e.clientY;
-      velocityX = 0;
-      velocityY = 0;
-    };
-
-    const onPointerMove = (e) => {
-      if (!isDragging) return;
-      const deltaX = e.clientX - prevMouseX;
-      const deltaY = e.clientY - prevMouseY;
-
-      velocityX = deltaX * 0.005;
-      velocityY = deltaY * 0.005;
-
-      earthGroup.rotation.y += velocityX;
-      earthGroup.rotation.x += velocityY;
-
-      prevMouseX = e.clientX;
-      prevMouseY = e.clientY;
-    };
-
-    const onPointerUp = () => {
-      isDragging = false;
-    };
-
-    canvas.addEventListener('pointerdown', onPointerDown);
-    window.addEventListener('pointermove', onPointerMove);
-    window.addEventListener('pointerup', onPointerUp);
-
-    // 9. Animation Loop
-    let animId;
-    const animate = () => {
-      animId = requestAnimationFrame(animate);
-
-      if (!isDragging) {
-        velocityX *= 0.95;
-        velocityY *= 0.95;
-        earthGroup.rotation.y += velocityX + 0.0018;
-        earthGroup.rotation.x += velocityY;
-      }
-
-      rings.forEach((r) => {
-        r.scale += r.speed;
-        if (r.scale > r.maxScale) {
-          r.scale = 1;
-        }
-        r.mesh.scale.set(r.scale, r.scale, r.scale);
-        r.mesh.material.opacity = Math.max(0, 1 - (r.scale - 1) / (r.maxScale - 1));
+    // Load Natural Earth Countries GeoJSON
+    fetch('/ne_110m_admin_0_countries.geojson')
+      .then((res) => {
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return res.json();
+      })
+      .then((countries) => {
+        world
+          .polygonsData(countries.features)
+          .polygonCapColor(() => '#123C68')
+          .polygonSideColor(() => '#0D2C4D')
+          .polygonStrokeColor(() => '#3E86D8')
+          .polygonAltitude(0.006);
+      })
+      .catch((err) => {
+        console.warn('Globe local geojson fallback:', err);
+        fetch('https://raw.githubusercontent.com/vasturiano/globe.gl/master/example/datasets/ne_110m_admin_0_countries.geojson')
+          .then((r) => r.json())
+          .then((countries) => {
+            world
+              .polygonsData(countries.features)
+              .polygonCapColor(() => '#123C68')
+              .polygonSideColor(() => '#0D2C4D')
+              .polygonStrokeColor(() => '#3E86D8')
+              .polygonAltitude(0.006);
+          });
       });
 
-      renderer.render(scene, camera);
-    };
-    animate();
-
+    // Resize
     const handleResize = () => {
-      if (!container) return;
-      const newWidth = container.clientWidth;
-      camera.aspect = newWidth / height;
-      camera.updateProjectionMatrix();
-      renderer.setSize(newWidth, height);
+      if (!el || !globeInstanceRef.current) return;
+      const newWidth = el.clientWidth;
+      const newHeight = Math.min(window.innerHeight * 0.9, 750);
+      globeInstanceRef.current.width(newWidth).height(newHeight);
     };
 
     window.addEventListener('resize', handleResize);
 
     return () => {
-      cancelAnimationFrame(animId);
       window.removeEventListener('resize', handleResize);
-      canvas.removeEventListener('pointerdown', onPointerDown);
-      window.removeEventListener('pointermove', onPointerMove);
-      window.removeEventListener('pointerup', onPointerUp);
-      if (canvas.parentNode) {
-        canvas.parentNode.removeChild(canvas);
+      if (globeInstanceRef.current) {
+        globeInstanceRef.current._destructor && globeInstanceRef.current._destructor();
       }
-      renderer.dispose();
+      el.innerHTML = '';
     };
   }, []);
 
   return (
     <div
-      ref={mountRef}
+      ref={containerRef}
+      className="sd-globe-host"
       style={{
         width: '100%',
-        height: '580px',
+        height: '750px',
         position: 'relative',
-        cursor: 'grab',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
       }}
     />
   );
