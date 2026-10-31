@@ -8,6 +8,23 @@ The CBL-01 dataset is a curated, multi-source corpus of SMS, WhatsApp, and conve
 - **Target Size**: 8,000 – 10,000 instances (~40% scam, ~60% legitimate).
 - **Minimum per Language/Script**: $\ge$ 800 samples.
 
+### 1.1 Complete Dataset Sources & Licensing
+
+| # | Dataset / Source | Official URL | License / Access | Modality & Role |
+| :-: | :--- | :--- | :--- | :--- |
+| **1** | **UCI SMS Spam Collection** | [archive.ics.uci.edu](https://archive.ics.uci.edu/dataset/228/sms+spam+collection) \| [HF](https://huggingface.co/datasets/sms_spam) \| [Kaggle](https://www.kaggle.com/datasets/uciml/sms-spam-collection-dataset) | CC BY 4.0 / Open | 5,574 English text messages for baseline legitimate (ham) & spam distribution. |
+| **2** | **Hinglish & English Financial Scam Dataset** | [Hugging Face (`bolewara`)](https://huggingface.co/bolewara/hinglish-scam-text-dataset) | Open / Research | 3,787 Indian financial smishing & legitimate text messages in Roman Hinglish & English. |
+| **3** | **Spam SMS in Hindi Language** | [IEEE Dataport](https://ieee-dataport.org/documents/spam-sms-hindi-language) / [DOI: 10.21227/5y8x-n678](https://dx.doi.org/10.21227/5y8x-n678) | Open Access (Free Account) | Devanagari Hindi spam & legitimate SMS corpus. |
+| **4** | **SpamShield Multilingual Dataset** | [SpamShield Article](https://dev.to/arjun-m/i-built-a-multilingual-spam-detection-dataset-with-149k-messages-across-23-languages-52ac) | Open / Community | 149,000 messages across 23 languages (including Indic languages). |
+| **5** | **Curated Indian Multilingual Scam Corpus** | Local Curated (`data/clean/`) | CC-BY 4.0 | Paraphrased templates covering Marathi, Hindi, and Hinglish across all 9 scam themes. |
+| **6** | **PhishTank** | [phishtank.org](https://phishtank.org) | Developer API / Open Data | Verified active phishing URL database. |
+| **7** | **OpenPhish** | [openphish.com](https://openphish.com) | Community Feed (Free) | Real-time zero-day phishing feed. |
+| **8** | **URLhaus (abuse.ch)** | [urlhaus.abuse.ch](https://urlhaus.abuse.ch) | CC0 / Open Feed | Malicious URLs, malware and `.apk` mobile dropper links. |
+| **9** | **Tranco Top Sites List** | [tranco-list.eu](https://tranco-list.eu) | Open Access | Top 1M benign domains for non-hardcoded whitelist & edit distance. |
+| **10** | **I4C / Cyber Crime Portal** | [cybercrime.gov.in](https://cybercrime.gov.in) | Public Sector / Advisory | Indian cybercrime advisories (Digital Arrest, KYC, SIM swap). |
+| **11** | **CERT-In** | [cert-in.org.in](https://www.cert-in.org.in) | Government Advisory | Official technical smishing & security bulletins. |
+| **12** | **RBI Kehta Hai** | [rbikehtahai.rbi.org.in](https://rbikehtahai.rbi.org.in) | Public Awareness | Authentic banking alert phrasing and OTP safety patterns. |
+
 ---
 
 ## 2. Scam Themes & Taxonomies

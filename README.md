@@ -52,9 +52,42 @@ Incoming Message (Text + Sender ID)
 
 ---
 
-## 3. Scam Taxonomy & Hard Negatives
+## 3. Dataset Taxonomy & Provenance Sources
 
-The system provides coverage across primary Indian cyber fraud vectors:
+This project is built directly on cybersecurity industry datasets, authentic regulatory feeds, and multilingual message collections. **No hardcoded decisions are used**—all classifiers, lookalike metrics, and risk calibrations are trained and extracted from data.
+
+### A. Message Datasets
+| # | Dataset Name | Source / Official Link | Description & Utility |
+| :-: | :--- | :--- | :--- |
+| **1** | **UCI SMS Spam Collection** | [UCI Repository](https://archive.ics.uci.edu/dataset/228/sms+spam+collection) \| [Hugging Face](https://huggingface.co/datasets/sms_spam) \| [Kaggle](https://www.kaggle.com/datasets/uciml/sms-spam-collection-dataset) | Gold-standard baseline for legitimate (ham) messages and general spam in English. |
+| **2** | **Hinglish & English Financial Scam Dataset** | [Hugging Face (`bolewara/hinglish-scam-text-dataset`)](https://huggingface.co/bolewara/hinglish-scam-text-dataset) | Financial fraud and smishing messages in Indian code-mixed Roman Hinglish and English. |
+| **3** | **Spam SMS in Hindi Language** | [IEEE Dataport](https://ieee-dataport.org/documents/spam-sms-hindi-language) \| [DOI 10.21227/5y8x-n678](https://dx.doi.org/10.21227/5y8x-n678) | Peer-reviewed Hindi Devanagari spam corpus for native Indic linguistic patterns. |
+| **4** | **SpamShield Multilingual Dataset** | [SpamShield 149k Corpus (Dev.to / Arjun M)](https://dev.to/arjun-m/i-built-a-multilingual-spam-detection-dataset-with-149k-messages-across-23-languages-52ac) | Large-scale multilingual dataset covering 149k messages across 23 languages, including Indic. |
+| **5** | **Curated Indian Multilingual Scam Corpus** | Local Curated / Synthetic Templates | Paraphrased and anonymized Indian messages covering Hindi, Marathi, and Hinglish across all 9 scam themes. |
+
+### B. Live & Verified URL Feeds (Cybersecurity Threat Feeds)
+| # | Threat Feed | Official Link | Cybersecurity Role |
+| :-: | :--- | :--- | :--- |
+| **6** | **PhishTank** | [phishtank.org](https://phishtank.org) | Verified phishing URL database and community threat intelligence. |
+| **7** | **OpenPhish** | [openphish.com](https://openphish.com) | Real-time zero-day phishing feed for live malicious URL scoring. |
+| **8** | **URLhaus (abuse.ch)** | [urlhaus.abuse.ch](https://urlhaus.abuse.ch) | Live database of URLs actively used for malware distribution and malicious `.apk` droppers. |
+| **9** | **Tranco Top Sites List** | [tranco-list.eu](https://tranco-list.eu) | Research-oriented top 1M benign domains used as dynamic ground-truth for legitimate domains and lookalike distance. |
+
+### C. Official Indian Scam Pattern References
+| # | Official Source | Official Portal | Focus Cyber Scam Patterns |
+| :-: | :--- | :--- | :--- |
+| **10** | **I4C / Cyber Crime Portal** | [cybercrime.gov.in](https://cybercrime.gov.in) | National cybercrime advisories on Digital Arrest, SIM swap, and instant loan fraud. |
+| **11** | **CERT-In** | [cert-in.org.in](https://www.cert-in.org.in) | Computer Emergency Response Team security alerts and smishing vulnerability advisories. |
+| **12** | **RBI Kehta Hai** | [rbikehtahai.rbi.org.in](https://rbikehtahai.rbi.org.in) | Reserve Bank of India consumer awareness campaigns on unauthorized transactions & OTP safety. |
+
+### D. Pretrained Multilingual NLP Models
+- **MuRIL (Multilingual Representations for Indic Languages)**: [`google/muril-base-cased`](https://huggingface.co/google/muril-base-cased) — Pretrained on 17 Indian languages and transliterated Roman script.
+- **XLM-RoBERTa**: [`FacebookAI/xlm-roberta-base`](https://huggingface.co/FacebookAI/xlm-roberta-base) — Cross-lingual language model for multilingual ensemble diversity.
+- **IndicBERT**: [`ai4bharat/indic-bert`](https://huggingface.co/ai4bharat) — Specialized compact Indic transformer model.
+
+---
+
+### E. Scam Taxonomy & Hard Negatives Matrix
 
 | Scam Theme | Description & Example Cues |
 | :--- | :--- |

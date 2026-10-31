@@ -7,9 +7,39 @@ malicious patterns (.apk, IP hosts, shorteners, high-risk TLDs).
 """
 
 import math
+from pathlib import Path
 import re
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Set, Tuple
 from urllib.parse import urlparse
+
+# Dynamic threat feeds cache
+DATA_RAW_DIR = Path(__file__).resolve().parent.parent / "data" / "raw"
+DYNAMIC_PHISHING_URLS: Set[str] = set()
+DYNAMIC_TRANCO_DOMAINS: Set[str] = set()
+
+
+def load_dynamic_threat_feeds():
+    """Load live OpenPhish and Tranco threat feeds from data/raw dynamically if available."""
+    global DYNAMIC_PHISHING_URLS, DYNAMIC_TRANCO_DOMAINS
+    openphish_file = DATA_RAW_DIR / "openphish_feed.txt"
+    if openphish_file.exists():
+        try:
+            with open(openphish_file, "r", encoding="utf-8", errors="ignore") as f:
+                DYNAMIC_PHISHING_URLS = {line.strip().lower() for line in f if line.strip()}
+        except Exception:
+            pass
+
+    tranco_file = DATA_RAW_DIR / "tranco_top_domains.txt"
+    if tranco_file.exists():
+        try:
+            with open(tranco_file, "r", encoding="utf-8", errors="ignore") as f:
+                DYNAMIC_TRANCO_DOMAINS = {line.strip().lower() for line in f if line.strip()}
+        except Exception:
+            pass
+
+
+# Initial load
+load_dynamic_threat_feeds()
 
 # Whitelist of legitimate domains for Indian banks, fintech, and public services
 GENUINE_DOMAINS_WHITELIST = {
@@ -121,8 +151,19 @@ def extract_url_features(url: str) -> Dict[str, Any]:
     subdomain, domain_name, suffix = parse_domain_parts(netloc)
     registered_domain = f"{domain_name}.{suffix}" if suffix else domain_name
 
-    # Check Whitelist
-    is_whitelisted = registered_domain in GENUINE_DOMAINS_WHITELIST or netloc in GENUINE_DOMAINS_WHITELIST
+    # Check Whitelist (Tranco top sites feed + institutional whitelist)
+    is_whitelisted = (
+        registered_domain in GENUINE_DOMAINS_WHITELIST
+        or netloc in GENUINE_DOMAINS_WHITELIST
+        or registered_domain in DYNAMIC_TRANCO_DOMAINS
+    )
+
+    # Check Live Phishing Blocklist (OpenPhish / URLhaus threat feeds)
+    in_blocklist = (
+        full_url in DYNAMIC_PHISHING_URLS
+        or full_url.rstrip("/") in DYNAMIC_PHISHING_URLS
+        or netloc in DYNAMIC_PHISHING_URLS
+    )
 
     # Check IP host
     is_ip = bool(IP_PATTERN.match(netloc))
@@ -181,9 +222,12 @@ def extract_url_features(url: str) -> Dict[str, Any]:
     risk_score = 0.0
     reasons = []
 
-    if is_whitelisted:
+    if in_blocklist:
+        risk_score = 1.0
+        reasons.append("Identified in active live phishing threat feed (OpenPhish/URLhaus).")
+    elif is_whitelisted:
         risk_score = 0.0
-        reasons.append("Verified genuine institutional domain.")
+        reasons.append("Verified high-reputation domain (Tranco/Official Whitelist).")
     else:
         if lookalike_detected:
             risk_score += 0.50
@@ -225,6 +269,7 @@ def extract_url_features(url: str) -> Dict[str, Any]:
         "has_suspicious_tld": int(has_suspicious_tld),
         "has_apk": int(has_apk),
         "has_punycode": int(has_punycode),
+        "in_blocklist": int(in_blocklist),
         "is_whitelisted": int(is_whitelisted),
         "lookalike_detected": int(lookalike_detected),
         "lookalike_brand": lookalike_brand,

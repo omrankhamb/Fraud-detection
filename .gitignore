@@ -12,7 +12,9 @@ ENV/
 # Data and large files
 data/*
 !data/.gitkeep
+!data/metadata.csv
 *.csv
+!data/metadata.csv
 *.parquet
 *.h5
 *.pkl
