@@ -1,7 +1,7 @@
 import React from 'react';
 import { FaShieldAlt, FaFileAlt, FaTrashAlt, FaStar, FaPhoneAlt, FaArrowDown } from 'react-icons/fa';
 
-export default function Hero({ onStartScanning }) {
+export default function Hero({ onStartScanning, onOpenChat }) {
   return (
     <section className="hero-outer-section" id="home">
       <div className="container">
@@ -65,6 +65,19 @@ export default function Hero({ onStartScanning }) {
                 <span>Check Suspicious SMS / WhatsApp / URL Now</span>
                 <FaArrowDown size={14} className="text-warning" />
               </button>
+
+              <button
+                type="button"
+                className="btn btn-lg px-4 py-3 rounded-pill fw-bold shadow-sm d-inline-flex align-items-center gap-2 border"
+                style={{ background: '#EFF6FF', borderColor: '#93C5FD', color: '#1D4ED8' }}
+                onClick={onOpenChat}
+              >
+                <span>💬 Open AI Chat Assistant</span>
+                <span className="badge rounded-pill bg-danger text-white" style={{ fontSize: '0.68rem' }}>
+                  NEW
+                </span>
+              </button>
+
               <a
                 href="tel:1930"
                 className="btn btn-outline-danger btn-lg px-4 py-3 rounded-pill fw-semibold d-inline-flex align-items-center gap-2"

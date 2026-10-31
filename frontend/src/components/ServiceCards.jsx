@@ -93,10 +93,14 @@ export default function ServiceCards({ onSelectService }) {
                   {srv.desc}
                 </p>
 
-                <div className="d-flex align-items-center gap-2 text-primary fw-semibold small mt-auto">
-                  <span>Verify with CBL-01</span>
-                  <FaArrowRight size={12} />
-                </div>
+                <button
+                  type="button"
+                  className="btn btn-sm rounded-pill px-3 py-1.5 fw-semibold d-inline-flex align-items-center gap-2 mt-auto shadow-sm"
+                  style={{ background: '#f1f5f9', color: '#1e40af', border: '1px solid #cbd5e1', width: 'fit-content' }}
+                >
+                  <span>Verify with Scam Detector</span>
+                  <FaArrowRight size={11} />
+                </button>
               </div>
             </motion.div>
           ))}

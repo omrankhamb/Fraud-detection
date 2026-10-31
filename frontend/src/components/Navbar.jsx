@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { FaSearch, FaArrowUp, FaPhoneAlt } from 'react-icons/fa';
+import { FaSearch, FaArrowUp, FaPhoneAlt, FaCommentDots, FaShieldAlt } from 'react-icons/fa';
 
-export default function Navbar({ onQuickUrlSearch, onReportClick }) {
+export default function Navbar({ currentView, onNavigate, onQuickUrlSearch, onReportClick }) {
   const [urlInput, setUrlInput] = useState('');
 
   const handleSearchSubmit = (e) => {
@@ -15,7 +15,16 @@ export default function Navbar({ onQuickUrlSearch, onReportClick }) {
     <div className="floating-navbar-container">
       <nav className="floating-navbar">
         {/* Project Title: Scam Detector */}
-        <a href="#home" className="brand-logo-container" style={{ textDecoration: 'none' }}>
+        <a
+          href="#home"
+          className="brand-logo-container"
+          style={{ textDecoration: 'none' }}
+          onClick={(e) => {
+            e.preventDefault();
+            if (onNavigate) onNavigate('dashboard');
+            window.location.hash = '#home';
+          }}
+        >
           <div className="brand-icon-shield">
             <svg width="38" height="38" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
@@ -61,24 +70,64 @@ export default function Navbar({ onQuickUrlSearch, onReportClick }) {
           </button>
         </form>
 
-        {/* Nav Links */}
-        <ul className="nav-links-list d-none d-md-flex">
+        {/* Nav Links + AI Chat Section Switcher */}
+        <ul className="nav-links-list d-none d-md-flex align-items-center">
           <li>
-            <a href="#scanner">Scanner</a>
+            <button
+              type="button"
+              className="btn btn-sm btn-link text-decoration-none p-0 fw-semibold"
+              style={{ color: currentView === 'dashboard' ? '#EA580C' : '#334155' }}
+              onClick={() => onNavigate && onNavigate('dashboard')}
+            >
+              Dashboard
+            </button>
           </li>
           <li>
-            <a href="#services">Services</a>
+            <a href="#scanner" onClick={() => onNavigate && onNavigate('dashboard')}>Scanner</a>
           </li>
           <li>
-            <a href="#stats">Scale</a>
+            <a href="#services" onClick={() => onNavigate && onNavigate('dashboard')}>Services</a>
           </li>
           <li>
-            <a href="#threat-map">Threat Radar</a>
+            <a href="#threat-map" onClick={() => onNavigate && onNavigate('dashboard')}>Radar</a>
+          </li>
+          <li>
+            {/* Dedicated AI Chat Section Pill */}
+            <button
+              type="button"
+              className="btn btn-sm rounded-pill px-3 py-1.5 fw-bold d-inline-flex align-items-center gap-1.5 shadow-sm"
+              style={{
+                background: currentView === 'chat' ? '#0F172A' : '#EFF6FF',
+                color: currentView === 'chat' ? '#FFFFFF' : '#2563EB',
+                border: '1px solid #BFDBFE',
+              }}
+              onClick={() => onNavigate && onNavigate('chat')}
+            >
+              <FaCommentDots size={13} />
+              <span>AI Chat Assistant</span>
+              <span className="badge rounded-pill bg-danger text-white ms-1" style={{ fontSize: '0.65rem' }}>
+                LIVE
+              </span>
+            </button>
           </li>
         </ul>
 
         {/* Action Button: Helpline 1930 */}
-        <div className="ms-auto ms-md-0">
+        <div className="ms-auto ms-md-0 d-flex align-items-center gap-2">
+          {/* Mobile Chat Button */}
+          <button
+            type="button"
+            className="btn btn-sm rounded-pill px-2.5 py-1.5 fw-bold d-md-none"
+            style={{
+              background: currentView === 'chat' ? '#0F172A' : '#EFF6FF',
+              color: currentView === 'chat' ? '#FFFFFF' : '#2563EB',
+              border: '1px solid #BFDBFE',
+            }}
+            onClick={() => onNavigate && onNavigate(currentView === 'chat' ? 'dashboard' : 'chat')}
+          >
+            <FaCommentDots />
+          </button>
+
           <button
             type="button"
             className="btn-report-orange"
