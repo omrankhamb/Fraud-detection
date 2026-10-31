@@ -1,3 +1,3 @@
 """
-Fraud Detection Package
+CBL-01 Scam Detection Package
 """
