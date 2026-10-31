@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, forwardRef, useImperativeHandle } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import {
@@ -43,8 +43,8 @@ const SAMPLE_MESSAGES = [
   },
 ];
 
-export default function Scanner() {
-  const [activeTab, setActiveTab] = useState('message'); // 'message' | 'url'
+const Scanner = forwardRef((props, ref) => {
+  const [activeTab, setActiveTab] = useState('message'); // 'message' | 'url' | 'pure-text'
   const [messageText, setMessageText] = useState('');
   const [senderId, setSenderId] = useState('');
   const [urlInput, setUrlInput] = useState('');
@@ -52,6 +52,28 @@ export default function Scanner() {
   const [result, setResult] = useState(null);
   const [copied, setCopied] = useState(false);
   const [activeLangTab, setActiveLangTab] = useState('en');
+
+  useImperativeHandle(ref, () => ({
+    loadInspectorMode: (item) => {
+      if (item.tab === 'url') {
+        setActiveTab('url');
+        setUrlInput(item.sampleUrl || '');
+      } else if (item.tab === 'pure-text') {
+        setActiveTab('pure-text');
+        setMessageText(item.sampleText || '');
+        setSenderId(item.sampleSender || '');
+      } else {
+        setActiveTab('message');
+        setMessageText(item.sampleText || '');
+        setSenderId(item.sampleSender || '');
+      }
+      setResult(null);
+      const el = document.getElementById('scanner');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
+    },
+  }));
 
   const triggerConfetti = () => {
     confetti({
@@ -253,7 +275,7 @@ Action: National Cyber Helpline 1930 / cybercrime.gov.in`;
 
             {/* Mode Switcher Tabs */}
             <div
-              className="p-1 rounded-pill border d-inline-flex align-items-center"
+              className="p-1 rounded-pill border d-inline-flex align-items-center flex-wrap gap-1"
               style={{ background: '#f1f5f9' }}
             >
               <button
@@ -271,8 +293,9 @@ Action: National Cyber Helpline 1930 / cybercrime.gov.in`;
                 }}
               >
                 <FaCommentDots size={14} />
-                <span>Message &amp; Sender</span>
+                <span>Full Message &amp; Sender</span>
               </button>
+
               <button
                 type="button"
                 className="btn btn-sm rounded-pill px-3 py-2 fw-semibold d-flex align-items-center gap-2"
@@ -289,6 +312,24 @@ Action: National Cyber Helpline 1930 / cybercrime.gov.in`;
               >
                 <FaLink size={14} />
                 <span>URL &amp; Link Only</span>
+              </button>
+
+              <button
+                type="button"
+                className="btn btn-sm rounded-pill px-3 py-2 fw-semibold d-flex align-items-center gap-2"
+                style={{
+                  background: activeTab === 'pure-text' ? '#0f172a' : 'transparent',
+                  color: activeTab === 'pure-text' ? '#ffffff' : '#64748b',
+                  border: 'none',
+                  boxShadow: activeTab === 'pure-text' ? '0 2px 8px rgba(15,23,42,0.2)' : 'none',
+                }}
+                onClick={() => {
+                  setActiveTab('pure-text');
+                  setResult(null);
+                }}
+              >
+                <FaShieldAlt size={14} />
+                <span>Pure Text / Extortion (No Link)</span>
               </button>
             </div>
           </div>
@@ -319,7 +360,7 @@ Action: National Cyber Helpline 1930 / cybercrime.gov.in`;
           </div>
 
           {/* Form Area */}
-          {activeTab === 'message' ? (
+          {activeTab !== 'url' ? (
             <form onSubmit={handleAnalyzeMessage}>
               <div className="row g-4 mb-3">
                 <div className="col-lg-8">
@@ -665,4 +706,6 @@ Action: National Cyber Helpline 1930 / cybercrime.gov.in`;
       </div>
     </section>
   );
-}
+});
+
+export default Scanner;

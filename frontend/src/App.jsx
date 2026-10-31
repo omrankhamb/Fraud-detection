@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
+import ActionCards from './components/ActionCards';
 import Scanner from './components/Scanner';
 import StatsBanner from './components/StatsBanner';
 import ServiceCards from './components/ServiceCards';
@@ -17,8 +18,20 @@ export default function App() {
     }
   };
 
+  const handleSelectCard = (item) => {
+    if (scannerRef.current && scannerRef.current.loadInspectorMode) {
+      scannerRef.current.loadInspectorMode(item);
+    } else {
+      scrollToScanner();
+    }
+  };
+
   const handleQuickUrlSearch = (url) => {
-    scrollToScanner();
+    if (scannerRef.current && scannerRef.current.loadInspectorMode) {
+      scannerRef.current.loadInspectorMode({ tab: 'url', sampleUrl: url });
+    } else {
+      scrollToScanner();
+    }
   };
 
   const handleReportClick = () => {
@@ -27,7 +40,7 @@ export default function App() {
 
   return (
     <div className="min-vh-100 d-flex flex-column" style={{ background: '#ffffff' }}>
-      {/* Navbar with Project Title: Scam Detector */}
+      {/* Navbar with Project Title: CBL-01 ScamShield */}
       <Navbar
         onQuickUrlSearch={handleQuickUrlSearch}
         onReportClick={handleReportClick}
@@ -37,6 +50,9 @@ export default function App() {
       <main className="flex-grow-1">
         {/* Hero Section */}
         <Hero onStartScanning={scrollToScanner} />
+
+        {/* Interactive Threat Inspector Cards */}
+        <ActionCards onSelectCard={handleSelectCard} />
 
         {/* Live Multilingual Scanner Tool */}
         <Scanner ref={scannerRef} />
