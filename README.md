@@ -187,7 +187,21 @@ python src/features_url.py
 python predict.py --input data/test_samples.csv --output predictions.csv
 ```
 
-### Launching the Interactive Web UI
+### Launching the Application
+
+#### Option 1: Full-Stack React + Vite Web Dashboard (Recommended)
+```bash
+# 1. Start the FastAPI Cybersecurity Backend (Port 8000)
+python -m src.api
+
+# 2. In a second terminal, launch the React Vite Frontend (Port 5173)
+cd frontend
+npm install
+npm run dev
+```
+> Or open `http://localhost:8000` directly after building (`npm run build`), where FastAPI serves the compiled React application.
+
+#### Option 2: Lightweight Streamlit Prototype
 ```bash
 streamlit run app/app.py
 ```

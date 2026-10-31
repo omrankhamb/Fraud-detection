@@ -35,7 +35,7 @@ CREDENTIAL_PATTERNS = [
 
 # Electricity disconnection cues
 ELECTRICITY_PATTERNS = [
-    re.compile(r"\b(electricity|power|bijli|vidyut|light)\b.*\b(disconnect|cut|band|khandit)\b", re.IGNORECASE),
+    re.compile(r"\b(electricity|power|bijli|vidyut|light)\b.*\b(disconnect\w*|cut|band|khandit)\b", re.IGNORECASE),
     re.compile(r"\b(bill\s*(?:unpaid|pending|bakaya)|previous\s*month\s*bill)\b", re.IGNORECASE),
     re.compile(r"\b(electricity\s*officer|bijli\s*adhikari|contact\s*officer)\b", re.IGNORECASE),
 ]

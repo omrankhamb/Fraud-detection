@@ -1,111 +1,517 @@
+@import "bootstrap/dist/css/bootstrap.min.css";
+
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
-
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
-
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
+  --primary-orange: #e26a2c;
+  --primary-orange-hover: #cf5719;
+  --primary-blue: #2563eb;
+  --dark-navy: #151e32;
+  --dark-navy-deep: #090e1a;
+  --ivory-bg: #fbf8f2;
+  --text-dark: #111827;
+  --text-muted: #64748b;
+  --border-light: #e5e7eb;
+  --font-heading: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
-
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
+* {
+  box-sizing: border-box;
 }
 
 body {
   margin: 0;
+  font-family: var(--font-body);
+  background-color: #ffffff;
+  color: var(--text-dark);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #111827;
+}
+
+/* Floating Top Pill Navbar matching ScamDekho */
+.floating-navbar-container {
+  position: fixed;
+  top: 18px;
+  left: 0;
+  right: 0;
+  z-index: 1050;
+  display: flex;
+  justify-content: center;
+  padding: 0 20px;
+  pointer-events: none;
+}
+
+.floating-navbar {
+  pointer-events: auto;
+  background: #ffffff;
+  border: 1px solid #eef2f6;
+  border-radius: 9999px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.07), 0 4px 10px rgba(0, 0, 0, 0.03);
+  padding: 8px 18px 8px 24px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  width: 100%;
+  max-width: 1180px;
+  transition: all 0.3s ease;
+}
+
+/* Authentic Logo */
+.brand-logo-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.brand-icon-shield {
+  width: 42px;
+  height: 42px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.brand-title-wrap {
   display: flex;
   flex-direction: column;
-  box-sizing: border-box;
+  line-height: 1;
 }
 
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
+.brand-name {
+  font-family: var(--font-heading);
+  font-weight: 900;
+  font-size: 1.45rem;
+  color: #1e293b;
+  letter-spacing: -0.04em;
 }
 
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
+.brand-name span {
+  color: var(--primary-orange);
 }
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
+
+.brand-tagline {
+  font-size: 0.68rem;
+  font-weight: 600;
+  font-style: italic;
+  color: var(--primary-orange);
+  margin-top: 3px;
+  letter-spacing: 0.01em;
 }
-p {
+
+/* Navbar Search Input Pill */
+.nav-search-bar {
+  flex: 1;
+  max-width: 320px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.nav-search-input {
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 9999px;
+  padding: 9px 46px 9px 36px;
+  font-size: 0.85rem;
+  color: #1e293b;
+  outline: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) inset;
+  transition: all 0.2s ease;
+}
+
+.nav-search-input:focus {
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.nav-search-icon-left {
+  position: absolute;
+  left: 14px;
+  color: #94a3b8;
+  font-size: 0.85rem;
+  pointer-events: none;
+}
+
+.nav-search-btn-round {
+  position: absolute;
+  right: 5px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #2563eb;
+  border: none;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.nav-search-btn-round:hover {
+  background: #1d4ed8;
+  transform: scale(1.06);
+}
+
+/* Nav Links */
+.nav-links-list {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  list-style: none;
   margin: 0;
+  padding: 0;
 }
 
-code,
-.counter {
-  font-family: var(--mono);
+.nav-links-list a {
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: #475569;
+  text-decoration: none;
+  transition: color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.nav-links-list a:hover {
+  color: var(--primary-orange);
+}
+
+.btn-report-orange {
+  background: linear-gradient(135deg, #e26a2c 0%, #ea580c 100%);
+  color: #ffffff !important;
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 10px 22px;
+  border-radius: 9999px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(226, 106, 44, 0.3);
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-report-orange:hover {
+  background: linear-gradient(135deg, #cf5719 0%, #c2410c 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(226, 106, 44, 0.4);
+}
+
+/* Hero Section */
+.hero-outer-section {
+  padding-top: 140px;
+  padding-bottom: 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-main-title {
+  font-size: 3.5rem;
+  line-height: 1.12;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #111827;
+  margin-bottom: 20px;
+}
+
+.hero-title-orange {
+  color: var(--primary-orange);
+}
+
+.hero-subtext {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: #475569;
+  max-width: 540px;
+  margin-bottom: 24px;
+}
+
+/* Feature Badge Pills matching ScamDekho */
+.scamdekho-pill {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 9999px;
+  padding: 7px 16px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #475569;
   display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
+  align-items: center;
+  gap: 7px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  white-space: nowrap;
 }
 
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+/* 3D Visual Shield Card matching Screenshot 4 */
+.shield-card-outer {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  aspect-ratio: 1.08;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.shield-card-layer-bg {
+  position: absolute;
+  width: 90%;
+  height: 90%;
+  background: #fbf7ee;
+  border-radius: 44px;
+  box-shadow: 0 20px 45px rgba(230, 220, 200, 0.4);
+  transform: rotate(-3deg);
+}
+
+.shield-card-layer-front {
+  position: relative;
+  width: 86%;
+  height: 86%;
+  background: #fdfaf3;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 40px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.04), 0 10px 20px rgba(0, 0, 0, 0.02);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Dark Navy Shield Shape */
+.shield-dark-badge {
+  position: relative;
+  width: 160px;
+  height: 190px;
+  background: linear-gradient(145deg, #1d283e 0%, #111a2d 100%);
+  border-radius: 48px 48px 80px 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 20px 35px rgba(17, 26, 45, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* Golden Padlock */
+.golden-padlock-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.padlock-shackle {
+  width: 44px;
+  height: 38px;
+  border: 7px solid #e5a45b;
+  border-bottom: none;
+  border-radius: 22px 22px 0 0;
+  margin-bottom: -5px;
+}
+
+.padlock-body {
+  width: 68px;
+  height: 52px;
+  background: linear-gradient(135deg, #f5b76f 0%, #d88934 100%);
+  border-radius: 14px;
+  box-shadow: 0 6px 16px rgba(216, 137, 52, 0.4), 0 1px 2px rgba(255, 255, 255, 0.4) inset;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.padlock-keyhole {
+  width: 10px;
+  height: 15px;
+  background: #603a11;
+  border-radius: 5px 5px 3px 3px;
+  position: relative;
+}
+
+.padlock-keyhole::after {
+  content: "";
+  position: absolute;
+  top: 10px;
+  left: 3px;
+  width: 4px;
+  height: 8px;
+  background: #603a11;
+}
+
+/* Floating 3D Spheres */
+/* Hero Animations matching ScamDekho Inspector Snippets */
+@keyframes sd-heroRise {
+  0% {
+    opacity: 0;
+    transform: translateY(28px) scale(0.97);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes sd-heroHalo {
+  0%, 100% {
+    transform: scale(1) translateZ(0);
+    opacity: 0.76;
+  }
+  50% {
+    transform: scale(1.12) translateZ(0);
+    opacity: 1;
+  }
+}
+
+@keyframes sd-heroOrb {
+  0%, 100% {
+    transform: translate(0px, 0px);
+  }
+  50% {
+    transform: translate(20px, -16px);
+  }
+}
+
+@keyframes sd-sphereFloat1 {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+@keyframes sd-sphereFloat2 {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(10px);
+  }
+}
+
+@keyframes sd-shieldBreath {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.sphere-floating-amber {
+  position: absolute;
+  top: 12%;
+  right: 6%;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fbbd6d 0%, #d97706 75%, #92400e 100%);
+  box-shadow: 0 10px 20px rgba(217, 119, 6, 0.3);
+  animation: sd-sphereFloat1 6s ease-in-out infinite;
+}
+
+.sphere-floating-ivory {
+  position: absolute;
+  top: 48%;
+  left: 2%;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #ffffff 0%, #fef3c7 60%, #fde68a 100%);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.06);
+  animation: sd-sphereFloat2 7s ease-in-out infinite;
+}
+
+.sphere-floating-navy {
+  position: absolute;
+  bottom: 12%;
+  right: 14%;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #334155 0%, #0f172a 100%);
+  box-shadow: 0 6px 12px rgba(15, 23, 42, 0.3);
+  animation: sd-sphereFloat1 8s ease-in-out infinite reverse;
+}
+
+/* Floating Widget Pill matching Screenshot (✕ 📰 Audit Security) */
+.floating-bottom-pill-scamdekho {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1040;
+  background: #bfdbfe;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  border-radius: 9999px;
+  padding: 8px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.25);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.3), 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.floating-bottom-pill-scamdekho:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.5), 0 12px 28px rgba(0, 0, 0, 0.12);
+}
+
+/* Cookie Banner matching Screenshot */
+.cookie-banner-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
+  padding: 16px 28px;
+  z-index: 1030;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.btn-cookie-customise {
+  background: #ffffff;
+  border: 1px solid #2563eb;
+  color: #2563eb;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 8px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-cookie-reject {
+  background: #2563eb;
+  border: 1px solid #2563eb;
+  color: #ffffff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 8px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-cookie-accept {
+  background: #2563eb;
+  border: 1px solid #2563eb;
+  color: #ffffff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 8px 20px;
+  border-radius: 6px;
+  cursor: pointer;
 }
